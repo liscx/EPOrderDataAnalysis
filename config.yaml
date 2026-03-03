@@ -1,0 +1,17 @@
+# 文件路径配置
+file_config:
+  input_file: "阳光优采交易订单清洗数据.xlsx"
+  output_file: "清洗结果_汇总.xlsx"
+
+# 时间区间配置
+analysis_period:
+  start_date: "2026-02-01"
+  end_date: "2026-02-28"
+
+# 报告维度与范围配置
+report_settings:
+  report_mode: "时间维度"   # 可选：时间维度 / 专区维度
+  use_period_data: "N"    # 新增：Y 使用“指定区间数据”，N 使用“清洗后数据”
+
+# 执行模式配置
+execution_mode: "all"

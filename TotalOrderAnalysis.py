@@ -1,100 +1,127 @@
-# step2 全局汇总
 import pandas as pd
+import yaml
 import os
 
-# ================= 配置区域 =================
-START_DATE = '2025-06-01'
-END_DATE = '2026-02-28'
-INPUT_FILE = '清洗结果_汇总.xlsx'
-OUTPUT_FILE = '清洗结果_汇总.xlsx'
 
-# 核心配置项：可选值为 "时间维度" 或 "专区维度"
-# REPORT_MODE = "专区维度"
-REPORT_MODE = "时间维度"
+def load_config():
+    """加载YAML配置文件"""
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 
-# ===========================================
+def get_stats_df(df_source, mode):
+    """核心统计逻辑：构建全量骨架，确保0订单输出，并空行分隔"""
+    if df_source.empty:
+        return pd.DataFrame()
+
+    # 1. 数据清洗与预处理
+    df = df_source.copy()
+    df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
+    df['订单号'] = df['订单号'].ffill()
+    df['专区名称'] = df['专区名称'].ffill()
+    df['月份'] = df['订单日期'].dt.strftime('%Y年%m月')
+
+    # 获取全量维度集合
+    all_months = sorted(df['月份'].dropna().unique())
+    all_zones = sorted(df['专区名称'].dropna().unique())
+
+    # 2. 核心统计：先聚合实际有的数据
+    actual_stats = df.groupby(['月份', '专区名称']).agg(
+        订单数量=('订单号', 'nunique'),
+        交易金额=('订单金额（元）', 'sum')
+    ).reset_index()
+
+    final_rows = []
+
+    if mode == "时间维度":
+        # 严格遍历：每个月都要有所有专区
+        for m in all_months:
+            m_total_qty = 0
+            m_total_money = 0
+
+            for z in all_zones:
+                # 在聚合结果中匹配
+                match = actual_stats[(actual_stats['月份'] == m) & (actual_stats['专区名称'] == z)]
+
+                # 即使匹配不到，也强制输出 0
+                qty = int(match['订单数量'].iloc[0]) if not match.empty else 0
+                money = float(match['交易金额'].iloc[0]) if not match.empty else 0.0
+
+                final_rows.append({'时间/专区': m, '明细项': z, '订单数量': qty, '交易金额(元)': money})
+                m_total_qty += qty
+                m_total_money += money
+
+            # 插入该月小计
+            final_rows.append(
+                {'时间/专区': f"{m} 小计", '明细项': '---', '订单数量': m_total_qty, '交易金额(元)': m_total_money})
+            # 插入空行（阅读性优化）
+            final_rows.append({'时间/专区': '', '明细项': '', '订单数量': '', '交易金额(元)': ''})
+
+    else:  # 专区维度
+        # 严格遍历：每个专区都要有所有月份
+        for z in all_zones:
+            z_total_qty = 0
+            z_total_money = 0
+
+            for m in all_months:
+                match = actual_stats[(actual_stats['月份'] == m) & (actual_stats['专区名称'] == z)]
+
+                qty = int(match['订单数量'].iloc[0]) if not match.empty else 0
+                money = float(match['交易金额'].iloc[0]) if not match.empty else 0.0
+
+                final_rows.append({'专区/时间': z, '明细项': m, '订单数量': qty, '交易金额(元)': money})
+                z_total_qty += qty
+                z_total_money += money
+
+            # 插入该专区小计
+            final_rows.append(
+                {'专区/时间': f"{z} 小计", '明细项': '---', '订单数量': z_total_qty, '交易金额(元)': z_total_money})
+            # 插入空行（阅读性优化）
+            final_rows.append({'专区/时间': '', '明细项': '', '订单数量': '', '交易金额(元)': ''})
+
+    return pd.DataFrame(final_rows)
+
 
 def run_analysis():
-    if not os.path.exists(INPUT_FILE):
-        print(f"错误：找不到文件 {INPUT_FILE}")
+    config = load_config()
+    file_path = config['file_config']['output_file']
+
+    if not os.path.exists(file_path):
+        print(f"错误：找不到文件 {file_path}")
         return
 
-    # 1. 加载数据
-    with pd.ExcelFile(INPUT_FILE) as xls:
-        df = pd.read_excel(xls, sheet_name='清洗后数据')
-        df_removed = pd.read_excel(xls, sheet_name='被清洗的测试数据')
+    # 1. 加载数据源
+    xls = pd.ExcelFile(file_path)
+    all_sheets = {sn: xls.parse(sn) for sn in xls.sheet_names}
 
-    # 2. 日期处理与筛选
-    df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
-    start_dt = pd.to_datetime(START_DATE)
-    end_dt = pd.to_datetime(END_DATE)
-    df_period = df[(df['订单日期'] >= start_dt) & (df['订单日期'] <= end_dt)].copy()
+    df_clean = all_sheets.get('清洗后数据', pd.DataFrame())
+    df_period = all_sheets.get('指定区间数据', pd.DataFrame())
 
-    if df_period.empty:
-        print(f"警告：{START_DATE} 至 {END_DATE} 期间无数据")
-        return
+    # 2. 定义任务
+    # 特别注意：全量报表的“骨架”应基于全量数据的维度，区间报表的“骨架”基于区间数据的维度
+    tasks = [
+        {"df": df_clean, "mode": "时间维度", "name": "汇总_时间_全量"},
+        {"df": df_period, "mode": "时间维度", "name": "汇总_时间_区间"},
+        {"df": df_clean, "mode": "专区维度", "name": "汇总_专区_全量"},
+        {"df": df_period, "mode": "专区维度", "name": "汇总_专区_区间"}
+    ]
 
-    # 3. 准备统计维度
-    all_months_dt = pd.date_range(start=start_dt, end=end_dt, freq='MS')
-    all_zones = sorted(df_period['专区名称'].dropna().unique().tolist())
+    analysis_results = {}
+    for task in tasks:
+        if not task["df"].empty:
+            print(f"处理中: {task['name']} (强制补零 + 空行分离)...")
+            analysis_results[task["name"]] = get_stats_df(task["df"], task["mode"])
 
-    # 4. 总体概况输出
-    total_orders = df_period['订单号'].nunique()
-    total_money = df_period['订单金额（元）'].sum()
-    print(f"--- 统计报告 ({START_DATE} 至 {END_DATE}) ---")
-    print(f"当前模式：【{REPORT_MODE}】")
-    print(f"全站累计总订单: {total_orders} 笔，全站累计总金额: {total_money:,.2f} 元")
-    print("-" * 65)
+    # 3. 写回 Excel
+    with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+        for sn, s_df in all_sheets.items():
+            if sn not in analysis_results.keys():
+                s_df.to_excel(writer, sheet_name=sn, index=False)
 
-    # 5. 执行逻辑
-    if REPORT_MODE == "时间维度":
-        for dt in all_months_dt:
-            m_label = dt.strftime('%Y年%m月')
-            print(f"\n【{m_label}】交易明细：")
+        for sn, r_df in analysis_results.items():
+            r_df.to_excel(writer, sheet_name=sn, index=False)
 
-            df_m = df_period[(df_period['订单日期'].dt.year == dt.year) & (df_period['订单日期'].dt.month == dt.month)]
-            zone_stats = df_m.groupby('专区名称').agg(count=('订单号', 'nunique'), money=('订单金额（元）', 'sum'))
-
-            # 记录月度小计
-            m_subtotal_orders = df_m['订单号'].nunique()
-            m_subtotal_money = df_m['订单金额（元）'].sum()
-
-            for i, z_name in enumerate(all_zones, start=1):
-                cnt = int(zone_stats.loc[z_name, 'count']) if z_name in zone_stats.index else 0
-                amt = zone_stats.loc[z_name, 'money'] if z_name in zone_stats.index else 0.0
-                print(f"  {i}. {z_name}：{cnt} 笔订单，{amt:,.2f} 元")
-
-            # 输出月度汇总
-            print(f"  >> {m_label}汇总：总计 {m_subtotal_orders} 个订单，累计金额 {m_subtotal_money:,.2f} 元")
-
-    elif REPORT_MODE == "专区维度":
-        zone_rank = df_period.groupby('专区名称')['订单金额（元）'].sum().sort_values(ascending=False).index
-
-        for i, z_name in enumerate(zone_rank, start=1):
-            df_z = df_period[df_period['专区名称'] == z_name]
-            z_total_orders = df_z['订单号'].nunique()
-            z_total_money = df_z['订单金额（元）'].sum()
-
-            print(f"\n{i}. {z_name} 明细：")
-
-            month_stats = df_z.groupby(df_z['订单日期'].dt.strftime('%Y年%m月')).agg(count=('订单号', 'nunique'),
-                                                                                     money=('订单金额（元）', 'sum'))
-
-            for dt in all_months_dt:
-                m_label = dt.strftime('%Y年%m月')
-                cnt = int(month_stats.loc[m_label, 'count']) if m_label in month_stats.index else 0
-                amt = month_stats.loc[m_label, 'money'] if m_label in month_stats.index else 0.0
-                print(f"   * {m_label}：{cnt} 笔订单，{amt:,.2f} 元")
-
-            # 输出专区汇总
-            print(f"   >> {z_name}总计：总计 {z_total_orders} 个订单，累计金额 {z_total_money:,.2f} 元")
-
-    # 6. 保存数据
-    with pd.ExcelWriter(OUTPUT_FILE, engine='openpyxl') as writer:
-        df.to_excel(writer, sheet_name='清洗后数据', index=False)
-        df_removed.to_excel(writer, sheet_name='被清洗的测试数据', index=False)
-        df_period.to_excel(writer, sheet_name='指定区间数据', index=False)
+    print(f"分析完成！四张汇总表已按严格格式输出至 '{file_path}'。")
 
 
 if __name__ == "__main__":

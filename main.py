@@ -1,8 +1,10 @@
 import time
 import traceback
+
+from DescribeTemplate import run_report_output
 # 1. 导入你的业务模块
 from TestDataWash import do_wash
-from CoreMetricsExtraction import run_core_metrics
+from CoreMetricsExtraction import run_enhanced_metrics
 from TotalOrderAnalysis import run_analysis as run_total_order
 from TotalPurchaserAnalysis import run_purchaser_analysis
 from DataRangePurchaserAnalysis import run_range_purchaser_top10
@@ -11,7 +13,7 @@ from DataRangeSuppliersAnalysis import run_range_supplier_top10
 from DataRangeGoodsAnalysis import run_product_analysis
 
 # 2. 导入可视化模块
-from AutoCharts import build_dashboard
+from AutoCharts import run_dashboard_output
 
 def start_analysis_flow(config):
     """
@@ -27,32 +29,36 @@ def start_analysis_flow(config):
     if mode == "all":
         start_time = time.time()
         try:
-            print("\n[1/9] 正在执行数据清洗与区间切片...")
+            print("\n[1/10] 正在执行数据清洗与区间切片...")
             do_wash()
 
-            print("\n[2/9] 正在执行月度/专区交易明细统计...")
+            print("\n[2/10] 正在执行月度/专区交易明细统计...")
             run_total_order()
 
-            print("\n[3/9] 正在执行采购企业历史全量汇总...")
+            print("\n[3/10] 正在执行采购企业历史全量汇总...")
             run_purchaser_analysis()
 
-            print("\n[4/9] 正在执行指定区间采购企业 Top10 排行...")
+            print("\n[4/10] 正在执行指定区间采购企业 Top10 排行...")
             run_range_purchaser_top10()
 
-            print("\n[5/9] 正在执行供应商历史全量汇总...")
+            print("\n[5/10] 正在执行供应商历史全量汇总...")
             run_supplier_analysis()
 
-            print("\n[6/9] 正在执行指定区间供应商 Top10 排行...")
+            print("\n[6/10] 正在执行指定区间供应商 Top10 排行...")
             run_range_supplier_top10()
 
-            print("\n[7/9] 正在执行商品维度分析...")
+            print("\n[7/10] 正在执行商品维度分析...")
             run_product_analysis()
 
-            print("\n[8/9] 正在提取全量核心概览指标...")
-            run_core_metrics()
-
+            print("\n[8/10] 正在提取全量核心概览指标...")
+            run_enhanced_metrics()
+            print("\n[9/10] 正在创作可视化看板...")
             # 3. 这里是调用点：执行可视化看板生成
-            build_dashboard(config)
+            run_dashboard_output()
+
+            print("\n[10/10] 正在编辑月报核心话术...")
+            # 3. 这里是调用点：执行可视化看板生成
+            run_report_output()
 
             end_time = time.time()
             print("\n" + "=" * 50)

@@ -68,7 +68,7 @@ def run_purchaser_analysis():
 
     # 5. 构造明细汇总表
     report_df = df.groupby('采购企业').agg(
-        专区名称=('专区名称', lambda x: " / ".join(x.dropna().unique())),
+        专区名称=('专区名称', lambda x: " / ".join(x.dropna().astype(str).unique())),
         订单数量=('订单号', 'nunique'),
         订单总额_元=('订单金额（元）', 'sum'),
         首次订单日期=('订单日期', 'min'),

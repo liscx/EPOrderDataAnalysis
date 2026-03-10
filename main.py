@@ -1,73 +1,37 @@
-import time
-import traceback
+import sys
+import os
+import argparse
 
-from DescribeTemplate import run_report_output
-# 1. 导入你的业务模块
-from TestDataWash import do_wash
-from CoreMetricsExtraction import run_enhanced_metrics
-from TotalOrderAnalysis import run_analysis as run_total_order
-from TotalPurchaserAnalysis import run_purchaser_analysis
-from DataRangePurchaserAnalysis import run_range_purchaser_top10
-from TotalSuppliersAnalysis import run_supplier_analysis
-from DataRangeSuppliersAnalysis import run_range_supplier_top10
-from DataRangeGoodsAnalysis import run_product_analysis
+# 确保项目根目录在 sys.path 中
+root_dir = os.path.dirname(os.path.abspath(__file__))
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
 
-# 2. 导入可视化模块
-from AutoCharts import run_dashboard_output
+from src.core import load_config
+from src.analysis import start_analysis_flow
 
-def start_analysis_flow(config):
-    """
-    由 GUI 调用的主入口函数
-    """
-    mode = config.get("execution_mode", "all")
+def main():
+    parser = argparse.ArgumentParser(description="Data Engine 命令行分析工具")
+    parser.add_argument("--config", default="config.yaml", help="配置文件路径")
+    parser.add_argument("--mode", choices=["all", "custom"], default="all", help="执行模式")
+    
+    args = parser.parse_args()
+    
+    # 加载配置
+    config = load_config(args.config)
+    if not config:
+        print(f"错误：无法加载配置文件 {args.config}")
+        return
+        
+    config["execution_mode"] = args.mode
+    
+    # 执行流程
+    try:
+        start_analysis_flow(config)
+    except KeyboardInterrupt:
+        print("\n用户取消执行。")
+    except Exception as e:
+        print(f"\n执行失败: {e}")
 
-    print("=" * 50)
-    print(f"  商品交易数据自动化分析系统启动")
-    print(f"  分析区间: {config['analysis_period']['start_date']} 至 {config['analysis_period']['end_date']}")
-    print("=" * 50)
-
-    if mode == "all":
-        start_time = time.time()
-        try:
-            print("\n[1/10] 正在执行数据清洗与区间切片...")
-            do_wash()
-
-            print("\n[2/10] 正在执行月度/专区交易明细统计...")
-            run_total_order()
-
-            print("\n[3/10] 正在执行采购企业历史全量汇总...")
-            run_purchaser_analysis()
-
-            print("\n[4/10] 正在执行指定区间采购企业 Top10 排行...")
-            run_range_purchaser_top10()
-
-            print("\n[5/10] 正在执行供应商历史全量汇总...")
-            run_supplier_analysis()
-
-            print("\n[6/10] 正在执行指定区间供应商 Top10 排行...")
-            run_range_supplier_top10()
-
-            print("\n[7/10] 正在执行商品维度分析...")
-            run_product_analysis()
-
-            print("\n[8/10] 正在提取全量核心概览指标...")
-            run_enhanced_metrics()
-            print("\n[9/10] 正在创作可视化看板...")
-            # 3. 这里是调用点：执行可视化看板生成
-            run_dashboard_output()
-
-            print("\n[10/10] 正在编辑月报核心话术...")
-            # 3. 这里是调用点：执行可视化看板生成
-            run_report_output()
-
-            end_time = time.time()
-            print("\n" + "=" * 50)
-            print(f"  所有分析任务已成功完成！")
-            print(f"  总耗时: {end_time - start_time:.2f} 秒")
-            print("=" * 50)
-
-        except Exception as e:
-            print(f"\n[运行异常]: {e}")
-            traceback.print_exc()
-    else:
-        print(f"提示：当前模式为 '{mode}'，跳过自动化流程。")
+if __name__ == "__main__":
+    main()

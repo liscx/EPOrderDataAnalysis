@@ -1,10 +1,6 @@
 import pandas as pd
-import yaml
 import os
-
-def load_config():
-    with open("config.yaml", "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from ..core import load_config, TEST_KEYWORDS
 
 def do_wash():
     # 1. 加载配置
@@ -29,13 +25,18 @@ def do_wash():
     df['辅助日期'] = df['订单日期'].ffill()
     df['辅助日期'] = pd.to_datetime(df['辅助日期'], errors='coerce')
 
-    # 4. 识别测试数据 (清洗逻辑)
-    test_keywords = ['测试', '国泰测试', '系统管理部']
-    def has_test_keyword(row):
-        row_str = "".join(row.astype(str))
-        return any(kw in row_str for kw in test_keywords)
-
-    mask_hit_test = df.apply(has_test_keyword, axis=1)
+    # 4. 识别测试数据 (清洗逻辑) - 更加严谨的过滤逻辑
+    # 关键词已统一移动到 src/core/constants.py
+    
+    # 针对整个 DataFrame 查找包含关键词的行，避免对数值列进行 join 操作导致的崩溃
+    # 逻辑：找出所有字符串类型的列，在这些列中搜索关键词
+    str_cols = df.select_dtypes(include=['object']).columns
+    mask_hit_test = df[str_cols].apply(
+        lambda row: any(row.astype(str).str.contains('|'.join(TEST_KEYWORDS), na=False)), 
+        axis=1
+    )
+    
+    # 获取需要剔除的订单号
     test_order_ids = df.loc[mask_hit_test, '辅助订单号'].unique()
 
     # 拆分：清洗后的全量数据 vs 被移除的测试数据

@@ -88,7 +88,6 @@ def generate_trend_chart():
 
     line.render("每月订单趋势图_最终简洁版.html")
     print("趋势图已生成：实心蓝点、无图例、含静态引导线。")
-订单金额
 
 if __name__ == "__main__":
     generate_trend_chart()

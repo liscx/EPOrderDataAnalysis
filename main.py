@@ -1,8 +1,8 @@
 import time
 import traceback
+import os
 
-from DescribeTemplate import run_report_output
-# 1. 导入你的业务模块
+# 1. 导入业务模块
 from TestDataWash import do_wash
 from CoreMetricsExtraction import run_enhanced_metrics
 from TotalOrderAnalysis import run_analysis as run_total_order
@@ -11,13 +11,13 @@ from DataRangePurchaserAnalysis import run_range_purchaser_top10
 from TotalSuppliersAnalysis import run_supplier_analysis
 from DataRangeSuppliersAnalysis import run_range_supplier_top10
 from DataRangeGoodsAnalysis import run_product_analysis
-
-# 2. 导入可视化模块
+from DescribeTemplate import run_report_output
 from AutoCharts import run_dashboard_output
+
 
 def start_analysis_flow(config):
     """
-    由 GUI 调用的主入口函数
+    由 GUI 调用的主入口函数 - 增强报错处理版
     """
     mode = config.get("execution_mode", "all")
 
@@ -28,46 +28,41 @@ def start_analysis_flow(config):
 
     if mode == "all":
         start_time = time.time()
-        try:
-            print("\n[1/10] 正在执行数据清洗与区间切片...")
-            do_wash()
 
-            print("\n[2/10] 正在执行月度/专区交易明细统计...")
-            run_total_order()
+        # 任务定义：(任务名称, 函数引用)
+        tasks = [
+            ("数据清洗与区间切片", do_wash),
+            ("月度/专区交易明细统计", run_total_order),
+            ("采购主体全量汇总 (企业/部门)", run_purchaser_analysis),
+            ("指定区间采购主体 Top10", run_range_purchaser_top10),
+            ("供应商全量汇总", run_supplier_analysis),
+            ("指定区间供应商 Top10", run_range_supplier_top10),
+            ("商品维度分析", run_product_analysis),
+            ("提取全量核心概览指标", run_enhanced_metrics),
+            ("创作可视化看板", run_dashboard_output),
+            ("编辑月报核心话术", run_report_output)
+        ]
 
-            print("\n[3/10] 正在执行采购企业历史全量汇总...")
-            run_purchaser_analysis()
+        success_count = 0
+        for i, (name, func) in enumerate(tasks, 1):
+            try:
+                print(f"\n[{i}/{len(tasks)}] 正在执行{name}...")
+                func()
+                success_count += 1
+                print(f"  √ {name} 执行成功")
+            except KeyError as e:
+                print(f"  × [字段缺失]: 在'{name}'步骤中找不到关键列 {e}。请检查原始文件表头。")
+            except FileNotFoundError as e:
+                print(f"  × [文件缺失]: {e}")
+            except Exception as e:
+                print(f"  × [执行异常]: '{name}' 运行失败。详情: {e}")
+                traceback.print_exc()
 
-            print("\n[4/10] 正在执行指定区间采购企业 Top10 排行...")
-            run_range_purchaser_top10()
-
-            print("\n[5/10] 正在执行供应商历史全量汇总...")
-            run_supplier_analysis()
-
-            print("\n[6/10] 正在执行指定区间供应商 Top10 排行...")
-            run_range_supplier_top10()
-
-            print("\n[7/10] 正在执行商品维度分析...")
-            run_product_analysis()
-
-            print("\n[8/10] 正在提取全量核心概览指标...")
-            run_enhanced_metrics()
-            print("\n[9/10] 正在创作可视化看板...")
-            # 3. 这里是调用点：执行可视化看板生成
-            run_dashboard_output()
-
-            print("\n[10/10] 正在编辑月报核心话术...")
-            # 3. 这里是调用点：执行可视化看板生成
-            run_report_output()
-
-            end_time = time.time()
-            print("\n" + "=" * 50)
-            print(f"  所有分析任务已成功完成！")
-            print(f"  总耗时: {end_time - start_time:.2f} 秒")
-            print("=" * 50)
-
-        except Exception as e:
-            print(f"\n[运行异常]: {e}")
-            traceback.print_exc()
+        end_time = time.time()
+        print("\n" + "=" * 50)
+        print(f"  所有分析任务执行完毕！")
+        print(f"  成功: {success_count} | 失败: {len(tasks) - success_count}")
+        print(f"  总耗时: {end_time - start_time:.2f} 秒")
+        print("=" * 50)
     else:
         print(f"提示：当前模式为 '{mode}'，跳过自动化流程。")

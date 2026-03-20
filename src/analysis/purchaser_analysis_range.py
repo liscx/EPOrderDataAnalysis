@@ -51,7 +51,7 @@ def run_range_purchaser_top10():
 
     # 4. 基础汇总（按企业聚合）
     ent_summary = df_period.groupby('采购企业').agg({
-        '专区名称': lambda x: " / ".join(x.dropna().unique()),
+        '专区名称': lambda x: " / ".join(x.dropna().astype(str).unique()),
         '省市': 'first',
         '订单号': 'nunique',  # 订单数量
         '数量': 'sum',  # 商品数量

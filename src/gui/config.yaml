@@ -1,0 +1,10 @@
+analysis_period:
+  end_date: '2026-02-28'
+  start_date: '2026-02-01'
+execution_mode: all
+file_config:
+  input_file: "D:/ai-c/OrderDataHandle/resources/\u9633\u5149\u4F18\u91C7\u4EA4\u6613\
+    \u8BA2\u5355\u6E05\u6D17\u6570\u636E.xlsx"
+  output_file: "D:\\ai-c\\OrderDataHandle\\resources\\\u6570\u636E\u6E05\u6D17\u6C47\
+    \u603B\u7ED3\u679C.xlsx"
+theme: Dark

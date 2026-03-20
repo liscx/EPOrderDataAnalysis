@@ -1,22 +1,16 @@
 @echo off
-chcp 65001 >nul
 title DataEngine 打包程序
 echo ========================================
 echo   [打包任务] 正在为 DataEngine 生成 exe...
 echo ========================================
 
-:: 进入根目录执行，防止路径混乱
-cd ..
-
 :: 执行打包命令
-".venv\Scripts\pyinstaller" --noconsole ^
+pyinstaller --noconsole ^
 --onefile ^
 --collect-all customtkinter ^
---icon="resources\app_icon.ico" ^
+--icon="app_icon.ico" ^
 --name "DataEngine" ^
---add-data "config.yaml;." ^
---add-data "resources;resources" ^
-gui.py
+GUI.py
 
 if %ERRORLEVEL% EQU 0 (
     echo.

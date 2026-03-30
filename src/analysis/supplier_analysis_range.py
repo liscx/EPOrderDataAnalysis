@@ -50,6 +50,11 @@ def run_range_supplier_top10():
     # 3. 核心修复逻辑：预处理与向下填充
     # A. 填充订单号和供应商（解决一单多货明细行缺失问题）
     df_period['订单号'] = df_period['订单号'].ffill()
+    
+    # 填充供应商类型
+    if '供应商类型' in df_period.columns:
+        df_period['供应商类型'] = df_period['供应商类型'].ffill()
+
     # 先处理可能的空字符串或 'nan' 字符串
     df_period['供应商'] = df_period['供应商'].astype(str).replace(['nan', 'None', ''], pd.NA).str.strip()
     df_period['供应商'] = df_period['供应商'].ffill()
@@ -68,15 +73,22 @@ def run_range_supplier_top10():
 
     # 4. 供应商基础汇总
     # 按照单位名称进行聚合
-    sup_summary = df_period.groupby('供应商').agg({
-        '订单号': 'nunique',  # 订单数量（按单号去重，一单多货只算1单）
-        '数量': 'sum',  # 商品总件数
-        '行金额_计算': 'sum'  # 交易总金额（明细行金额之和）
-    }).reset_index()
+    agg_dict = {
+        '订单号': 'nunique',  # 订单数量
+        '数量': 'sum',      # 商品总件数
+        '行金额_计算': 'sum'  # 交易总金额
+    }
+    if '供应商类型' in df_period.columns:
+        agg_dict['供应商类型'] = 'first'
+
+    sup_summary = df_period.groupby('供应商').agg(agg_dict).reset_index()
 
     # 统一列名
-    sup_summary.columns = ['单位名称', '订单数量', '商品数量', '订单金额（元）']
-    sup_summary['供应商类型'] = '--'
+    if '供应商类型' in sup_summary.columns:
+        sup_summary.columns = ['单位名称', '订单数量', '商品数量', '订单金额（元）', '供应商类型']
+    else:
+        sup_summary.columns = ['单位名称', '订单数量', '商品数量', '订单金额（元）']
+        sup_summary['供应商类型'] = '--'
 
     # 5. 生成 Top 10 榜单
     # 榜单1：按订单数量降序

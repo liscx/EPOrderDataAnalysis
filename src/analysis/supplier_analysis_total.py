@@ -41,19 +41,29 @@ def run_supplier_analysis():
         return
 
     # 4. 供应商维度聚合统计
-    supplier_report = df.groupby('供应商').agg(
-        订单数量=('订单号', 'nunique'),
-        订单总额_元=('订单金额（元）', 'sum'),
-        商品数量=('数量', 'sum'),
-        专区名称=('专区名称', lambda x: "、".join(x.dropna().astype(str).unique()))
-    ).reset_index()
+    agg_dict = {
+        '订单号': 'nunique',
+        '订单金额（元）': 'sum',
+        '数量': 'sum',
+        '专区名称': lambda x: "、".join(str(v) for v in x.dropna().unique())
+    }
+    if '供应商类型' in df.columns:
+        agg_dict['供应商类型'] = 'first'
+
+    supplier_report = df.groupby('供应商').agg(agg_dict).reset_index()
 
     # 5. 排序与格式化
     # 按照订单总额从高到低排列（降序）
-    supplier_report = supplier_report.sort_values(by='订单总额_元', ascending=False)
+    sort_col = '订单金额（元）'
+    supplier_report = supplier_report.sort_values(by=sort_col, ascending=False)
 
     # 重命名列名
-    supplier_report.columns = ['供应商', '订单数量', '订单总额（元）', '商品数量', '专区名称']
+    if '供应商类型' in supplier_report.columns:
+        supplier_report.columns = ['供应商', '订单数量', '订单总额（元）', '商品数量', '专区名称', '供应商类型']
+        # 调整顺序以匹配可能的模板需求 (序号, 供应商, 供应商类型, 订单数量, 订单总额（元）, 商品数量, 专区名称)
+        supplier_report = supplier_report[['供应商', '供应商类型', '订单数量', '订单总额（元）', '商品数量', '专区名称']]
+    else:
+        supplier_report.columns = ['供应商', '订单数量', '订单总额（元）', '商品数量', '专区名称']
 
     # 插入序号
     supplier_report.insert(0, '序号', range(1, len(supplier_report) + 1))

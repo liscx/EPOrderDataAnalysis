@@ -1,12 +1,17 @@
 import pandas as pd
 import yaml
 import os
+import sys
+import os
 from pyecharts import options as opts
 from pyecharts.charts import Pie, Line, Bar, Page
 from pyecharts.globals import CurrentConfig
 
-# 设置资源路径，确保图表库正常加载
-CurrentConfig.ONLINE_HOST = "https://assets.pyecharts.org/assets/"
+def get_base_dir():
+    """获取根目录，兼容普通运行与 PyInstaller 打包环境"""
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def load_config():
@@ -46,7 +51,7 @@ def get_toolbox_opts():
     )
 
 
-def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False):
+def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False, chart_id=None):
     """饼图组件"""
     df.columns = [c.strip() for c in df.columns]
     if is_total_sheet:
@@ -60,7 +65,7 @@ def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False):
     data = [(str(row['Label']), round(float(row[val_col]), 2)) for _, row in plot_df.iterrows() if row[val_col] > 0]
 
     return (
-        Pie(init_opts=opts.InitOpts(width="1000px", height="600px", bg_color="white"))
+        Pie(init_opts=opts.InitOpts(chart_id=chart_id, width="1000px", height="600px", bg_color="white"))
         .add("", data, radius=["35%", "65%"])
         .set_global_opts(
             title_opts=opts.TitleOpts(title=title, pos_left="center"),
@@ -72,7 +77,7 @@ def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False):
     )
 
 
-def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=False):
+def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=False, chart_id=None):
     """折线图组件 - 已去掉网格线"""
     df_temp = df.copy()
 
@@ -92,7 +97,7 @@ def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=Fal
     ml_data = [[{"coord": [x_data[i], y_data[i]]}, {"coord": [x_data[i], 0]}] for i in range(len(x_data))]
 
     return (
-        Line(init_opts=opts.InitOpts(width="1000px", height="500px", bg_color="white"))
+        Line(init_opts=opts.InitOpts(chart_id=chart_id, width="1000px", height="500px", bg_color="white"))
         .add_xaxis(x_data)
         .add_yaxis(
             series_name=title, y_axis=y_data, is_smooth=False, symbol="circle", symbol_size=8,
@@ -114,7 +119,7 @@ def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=Fal
     )
 
 
-def create_bar_component(df, title, x_col, y_col):
+def create_bar_component(df, title, x_col, y_col, chart_id=None):
     """柱状图组件 - 已去掉网格线"""
     df.columns = [c.strip() for c in df.columns]
     tdf = df[df[x_col].astype(str).str.contains('小计', na=False)].copy()
@@ -126,7 +131,7 @@ def create_bar_component(df, title, x_col, y_col):
     y_axis_max = int(max(y_values) * 1.2) if y_values and max(y_values) > 0 else None
 
     return (
-        Bar(init_opts=opts.InitOpts(width="1000px", height="500px", bg_color="white"))
+        Bar(init_opts=opts.InitOpts(chart_id=chart_id, width="1000px", height="500px", bg_color="white"))
         .add_xaxis(x_data)
         .add_yaxis(
             "金额", y_values, color="#409EFF", category_gap="45%",
@@ -149,10 +154,13 @@ def run_dashboard_output():
     config = load_config()
     excel_path = config['file_config']['output_file']
     output_dir = os.path.dirname(excel_path)
+    
+    # 移除本地 resources 依赖，直接使用网络 CDN，防止对方缺少 echarts.min.js 导致白屏
+    # CurrentConfig.ONLINE_HOST = "../../resources/"
 
     start_dt = pd.to_datetime(config['analysis_period']['start_date'])
     end_dt = pd.to_datetime(config['analysis_period']['end_date'])
-    time_label = f"{start_dt.strftime('%Y%m')}-{end_dt.strftime('%Y%m')}"
+    time_label = str(end_dt.month)
 
     full_output_path = os.path.join(output_dir, f"分析看板_{time_label}.html")
 
@@ -167,11 +175,11 @@ def run_dashboard_output():
 
     # 3. 创建页面
     page = Page(layout=Page.SimplePageLayout)
-    page.add(create_pie_component(d_interval, f"【{time_label}】月订单总金额组成", "明细项", "交易金额(元)"))
-    page.add(create_line_component(d_full_time, "每月订单数量趋势", "时间/专区", "订单数量"))
-    page.add(create_bar_component(d_full_time, "每月订单总金额", "时间/专区", "交易金额(元)"))
-    page.add(create_pie_component(d_full_zone, "订单总金额组成", "专区/时间", "交易金额(元)", is_total_sheet=True))
-    page.add(create_line_component(d_raw_fixed, "每月交易商品数量趋势", None, None, is_item_nunique=True))
+    page.add(create_pie_component(d_interval, f"{time_label}月订单总金额组成", "明细项", "交易金额(元)", chart_id="f63ca06ccec641a5b862f5e3dd6f5de7"))
+    page.add(create_line_component(d_full_time, "每月订单数量趋势", "时间/专区", "订单数量", chart_id="1b6e58a40b394e60857af14d5b7b8ec8"))
+    page.add(create_bar_component(d_full_time, "每月订单总金额", "时间/专区", "交易金额(元)", chart_id="dc0de83a05b74081bb1f96cfa0bb85b3"))
+    page.add(create_pie_component(d_full_zone, "订单总金额组成", "专区/时间", "交易金额(元)", is_total_sheet=True, chart_id="eb93e670de6b4a5ba60bff478c1ec7bb"))
+    page.add(create_line_component(d_raw_fixed, "每月交易商品数量趋势", None, None, is_item_nunique=True, chart_id="1e91645237624656a64ab2795d70e6b4"))
 
     # 4. 渲染
     page.render(full_output_path)

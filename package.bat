@@ -12,8 +12,10 @@ pyinstaller --noconsole ^
 --collect-all customtkinter ^
 --collect-all selenium ^
 --add-data "resources;resources" ^
+--icon="app_icon.ico" ^
 --name "DataEngine" ^
 GUI.py
+
 
 
 if %ERRORLEVEL% EQU 0 (

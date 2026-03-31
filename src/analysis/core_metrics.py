@@ -89,32 +89,23 @@ def run_enhanced_metrics():
     except Exception as e:
         print(f"提取 {{采购人数量}} 失败: {e}")
 
-    # 【3】供应商与电商维度：供应商数量、电商数量、本地供应商数量
-    # 基于【清洗后数据】，严格按照“供应商”列去重统计
+    # 【3】供应商与电商维度：供应商数量、电商数量、本地供应商数量、新注册供应商情况
     try:
+        # --- 3.1 基础供应商统计 (基于清洗后数据) ---
         if '供应商' in df_raw.columns:
             valid_sups = df_raw['供应商'].astype(str).str.strip()
-            
-            # 获取有效的供应商（非空且非汇总行）作为后续统计的基础范围
             valid_sup_mask = ~valid_sups.isin(['nan', 'None', '', '汇总', '合计'])
-            
-            # {{供应商数量}} 和 {{供应商总数}}：针对所有有效记录去重
             total_sup = valid_sups[valid_sup_mask].nunique()
             kv_data['{{供应商数量}}'] = str(total_sup)
             kv_data['{{供应商总数}}'] = str(total_sup)
             
-            # 根据“供应商类型”列判断是否为电商（不再使用硬编码关键词库）
             if '供应商类型' in df_raw.columns:
                 is_ec = df_raw['供应商类型'].astype(str).str.contains('电商', na=False)
             else:
-                # 如果缺少该列，则默认都不是电商，避免报错
                 is_ec = pd.Series([False] * len(df_raw))
             
-            # {{电商数量}}：基于“供应商类型为电商”进行去重
             ec_count = valid_sups[is_ec & valid_sup_mask].nunique()
             kv_data['{{电商数量}}'] = str(ec_count)
-            
-            # {{本地供应商数量}}：基于“供应商类型非电商”进行去重
             local_count = valid_sups[(~is_ec) & valid_sup_mask].nunique()
             kv_data['{{本地供应商数量}}'] = str(local_count)
         else:
@@ -122,8 +113,29 @@ def run_enhanced_metrics():
             kv_data['{{供应商总数}}'] = "0"
             kv_data['{{电商数量}}'] = "0"
             kv_data['{{本地供应商数量}}'] = "0"
+
+        # --- 3.2 新注册供应商专项提取 (基于供应商信息提取 Sheet) ---
+        try:
+            df_new_sup = xls.parse('供应商信息提取')
+            if not df_new_sup.empty:
+                new_sup_count = len(df_new_sup)
+                new_zones = df_new_sup['专区名称'].unique().tolist()
+                new_zones_str = "、".join([str(z) for z in new_zones if str(z).strip() not in ['nan','None','']])
+                
+                kv_data['{{新注册供应商数量}}'] = str(new_sup_count)
+                kv_data['{{新注册供应商专区}}'] = new_zones_str if new_zones_str else "无源数据"
+            else:
+                kv_data['{{新注册供应商数量}}'] = "0" # 数量为0是正常业务，不建议写异常
+                kv_data['{{新注册供应商专区}}'] = "无源数据"
+        except:
+            # 文件未读到或 Sheet 缺失，属于异常
+            kv_data['{{新注册供应商数量}}'] = "元数据异常"
+            kv_data['{{新注册供应商专区}}'] = "元数据异常"
+
+
     except Exception as e:
         print(f"提取 供应商相关数量 失败: {e}")
+
 
     # 【4】整体业务规模：订单数量、订单总额、已完成订单数量及总额
     # 按照指示，目前全量清洗后的数据（df_raw）即可被视作所有完成（合规未废除）数据的全量

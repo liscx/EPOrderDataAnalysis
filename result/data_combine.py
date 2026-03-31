@@ -152,9 +152,32 @@ def main():
                     {0: '序号', 1: '商品名称', 2: '供应商', 3: '销售数量', 4: '销售总额_计算', 5: '平均单价',
                      6: '专区名称'}, 10)
 
+    # 【升级：绝对全等锁定表格】严格检查表头序列：['序号', '单位名称', '专区名称', '入库日期']
+    target_sheet = sheets.get('供应商信息提取')
+    if target_sheet is not None and not target_sheet.empty:
+        found_table = False
+        target_headers = ['序号', '单位名称', '专区名称', '入库日期']
+        for table in ts:
+            try:
+                # 获取第一行所有单元格内容
+                header_cells = [cell.text.strip() for cell in table.rows[0].cells]
+                # 只有当且仅当每一个表头完全一致时才填入
+                if len(header_cells) >= 4 and header_cells[:4] == target_headers:
+                    fill_table_data(table, target_sheet,
+                                    {0: '序号', 1: '单位名称', 2: '专区名称', 3: '入库日期'})
+                    found_table = True
+                    print(">>> 已成功在 Word 中精准锁定并填充 [新注册供应商清单] 表格。")
+                    break
+            except:
+                continue
+        if not found_table:
+            print(f"警告：未在 Word 模板中检测到全等表头 {target_headers} 的表格，跳过明细填充。")
+
     # D. 保存生成的报告
     try:
         doc.save(OUTPUT_FILE)
+
+
         print(f"\n✨ 数据植入成功！报告：{OUTPUT_FILE}")
     except PermissionError:
         print(f"\n❌ 保存失败：文件 '{OUTPUT_FILE}' 可能正被其他程序打开（如 Word）。")

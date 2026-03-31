@@ -67,18 +67,47 @@ def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False, cha
 
     return (
         Pie(init_opts=opts.InitOpts(
-            chart_id=chart_id, width="1000px", height="600px", bg_color="white",
+            chart_id=chart_id, width="1200px", height="750px", bg_color="white",
             animation_opts=opts.AnimationOpts(animation=False)
         ))
-        .add("", data, radius=["35%", "65%"])
-        .set_global_opts(
-            title_opts=opts.TitleOpts(title=title, pos_left="center"),
-            legend_opts=opts.LegendOpts(is_show=False),
-            toolbox_opts=get_toolbox_opts()
+
+        .add(
+            "", data, 
+            radius=["40%", "70%"],
+            itemstyle_opts=opts.ItemStyleOpts(
+                border_width=2, border_color="white"
+            )
         )
-        .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}元\n({d}%)"))
+
+        .set_global_opts(
+            title_opts=opts.TitleOpts(
+                title=title, pos_left="center", pos_top="10",
+                title_textstyle_opts=opts.TextStyleOpts(font_size=32) # 32px 保持，移除加粗
+            ),
+            legend_opts=opts.LegendOpts(is_show=False), 
+            toolbox_opts=opts.ToolboxOpts(is_show=False) 
+        )
+        .set_series_opts(
+            label_opts=opts.LabelOpts(
+                is_show=True, position="outside", font_size=22, 
+                formatter="{b}: {c}元",
+                background_color="white",
+                border_color="#409EFF",
+                border_width=1, 
+                border_radius=4,
+                padding=[8, 12]
+            )
+        )
+
+
+
+
         .set_colors(["#409EFF", "#67C23A", "#E6A23C", "#F56C6C", "#909399"])
     )
+
+
+
+
 
 
 def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=False, chart_id=None):
@@ -99,35 +128,70 @@ def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=Fal
         y_data = ts.astype(int).tolist()
 
     ml_data = [[{"coord": [x_data[i], y_data[i]]}, {"coord": [x_data[i], 0]}] for i in range(len(x_data))]
+    # 构造投影垂直线数据
+    ml_data = [[{"coord": [x_data[i], y_data[i]]}, {"coord": [x_data[i], 0]}] for i in range(len(x_data))]
 
     return (
         Line(init_opts=opts.InitOpts(
-            chart_id=chart_id, width="1000px", height="500px", bg_color="white",
+            chart_id=chart_id, width="1200px", height="650px", bg_color="white",
             animation_opts=opts.AnimationOpts(animation=False)
         ))
+
         .add_xaxis(x_data)
         .add_yaxis(
-            series_name=title, y_axis=y_data, is_smooth=False, symbol="circle", symbol_size=8,
-            itemstyle_opts=opts.ItemStyleOpts(color="#409EFF"),
-            label_opts=opts.LabelOpts(is_show=True, position="top"),
+            series_name=title, y_axis=y_data, 
+            is_smooth=False, # 最终定稿：回归直线
+            symbol="emptyCircle", symbol_size=8, 
+            linestyle_opts=opts.LineStyleOpts(
+                width=3, color="#409EFF"
+            ),
+            label_opts=opts.LabelOpts(
+                is_show=True, position="top", font_size=22, # 正确升级为 22px
+                background_color="white", 
+                border_width=0, 
+                padding=[4, 8]
+            ),
+
+
             markline_opts=opts.MarkLineOpts(
                 data=ml_data, symbol=["none", "none"],
-                linestyle_opts=opts.LineStyleOpts(type_="dashed", color="#DCDFE6")
+                linestyle_opts=opts.LineStyleOpts(type_="solid", color="#DCDFE6", width=1, opacity=0.3)
             )
         )
         .set_global_opts(
-            title_opts=opts.TitleOpts(title=title, pos_left="center"),
+            title_opts=opts.TitleOpts(
+                title=title,
+                pos_left="center", pos_top="5",
+                title_textstyle_opts=opts.TextStyleOpts(font_size=32), # 恢复 32px
+                subtitle_textstyle_opts=opts.TextStyleOpts(font_size=16, color="#909399")
+            ),
             legend_opts=opts.LegendOpts(is_show=False),
-            toolbox_opts=get_toolbox_opts(),
-            # 去掉网格线
-            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=False)),
-            yaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=False)),
+            toolbox_opts=opts.ToolboxOpts(is_show=False),
+            xaxis_opts=opts.AxisOpts(
+                axislabel_opts=opts.LabelOpts(font_size=20), # 恢复 20px
+                axistick_opts=opts.AxisTickOpts(is_show=True),
+                splitline_opts=opts.SplitLineOpts(is_show=False)
+            ),
+            yaxis_opts=opts.AxisOpts(
+                axislabel_opts=opts.LabelOpts(font_size=20), # 恢复 20px
+                splitline_opts=opts.SplitLineOpts(
+                    is_show=True, 
+                    linestyle_opts=opts.LineStyleOpts(type_="dashed", opacity=0.1)
+                )
+            ),
         )
+
+
+
     )
 
 
+
+
+
+
 def create_bar_component(df, title, x_col, y_col, chart_id=None):
-    """柱状图组件 - 已去掉网格线"""
+    """柱状图组件 - 设计升级：圆角+质感蓝，大字号"""
     df.columns = [c.strip() for c in df.columns]
     tdf = df[df[x_col].astype(str).str.contains('小计', na=False)].copy()
     tdf['DT'] = pd.to_datetime(tdf[x_col].astype(str).str.replace(' 小计', ''), format='%Y年%m月', errors='coerce')
@@ -139,23 +203,42 @@ def create_bar_component(df, title, x_col, y_col, chart_id=None):
 
     return (
         Bar(init_opts=opts.InitOpts(
-            chart_id=chart_id, width="1000px", height="500px", bg_color="white",
+            chart_id=chart_id, width="1200px", height="650px", bg_color="white",
             animation_opts=opts.AnimationOpts(animation=False)
         ))
+
         .add_xaxis(x_data)
         .add_yaxis(
-            "金额", y_values, color="#409EFF", category_gap="45%",
-            label_opts=opts.LabelOpts(is_show=True, position="top")
+            "金额", y_values,
+            category_gap="50%", 
+            itemstyle_opts=opts.ItemStyleOpts(
+                color="#409EFF", 
+                border_radius=[0, 0, 0, 0] 
+            ),
+            label_opts=opts.LabelOpts(is_show=True, position="top", font_size=22)
         )
         .set_global_opts(
-            title_opts=opts.TitleOpts(title=title, pos_left="center"),
+            title_opts=opts.TitleOpts(
+                title=title, pos_left="center", pos_top="10",
+                title_textstyle_opts=opts.TextStyleOpts(font_size=32)
+            ),
             legend_opts=opts.LegendOpts(is_show=False),
-            toolbox_opts=get_toolbox_opts(),
-            # 去掉网格线
-            xaxis_opts=opts.AxisOpts(splitline_opts=opts.SplitLineOpts(is_show=False)),
-            yaxis_opts=opts.AxisOpts(max_=y_axis_max, splitline_opts=opts.SplitLineOpts(is_show=False)),
+            toolbox_opts=opts.ToolboxOpts(is_show=False),
+            xaxis_opts=opts.AxisOpts(
+                axislabel_opts=opts.LabelOpts(font_size=20),
+                splitline_opts=opts.SplitLineOpts(is_show=False)
+            ),
+            yaxis_opts=opts.AxisOpts(
+                max_=y_axis_max,
+                axislabel_opts=opts.LabelOpts(font_size=20),
+                splitline_opts=opts.SplitLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(opacity=0.3))
+            ),
         )
+
+
     )
+
+
 
 
 def run_dashboard_output():

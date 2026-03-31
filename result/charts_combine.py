@@ -65,9 +65,13 @@ def get_charts_via_js(html_path, output_dir, chart_mapping):
         js_cmd = f"""
         var container = document.getElementById('{div_id}');
         if (!container) return "ERROR:ID_NOT_FOUND";
-        var canvas = container.getElementsByTagName('canvas')[0];
-        if (!canvas) return "ERROR:CANVAS_NOT_READY";
-        return canvas.toDataURL('image/png');
+        var chart = echarts.getInstanceByDom(container);
+        if (!chart) return "ERROR:CANVAS_NOT_READY";
+        return chart.getDataURL({{
+            type: 'png',
+            pixelRatio: 3,
+            backgroundColor: '#fff'
+        }});
         """
         
         try:

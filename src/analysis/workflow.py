@@ -15,7 +15,7 @@ from . import (
     do_wash, 
     run_enhanced_metrics, 
     run_total_order, 
-    run_purchaser_analysis, 
+    run_purchaser_analysis,
     run_range_purchaser_top10, 
     run_supplier_analysis, 
     run_range_supplier_top10, 
@@ -54,18 +54,25 @@ def start_analysis_flow(config):
             print("\n[6/10] 正在执行指定区间供应商 Top10 排行...")
             run_range_supplier_top10()
 
-            print("\n[7/10] 正在执行商品维度分析...")
+            print("\n[7/12] 正在执行商品维度分析...")
             run_product_analysis()
 
-            print("\n[8/10] 正在提取全量核心概览指标...")
+            print("\n[8/12] 正在提取特定供应商原始数据...")
+            from ..extra.new_supplier_data_Prasing import run_new_supplier_parsing
+            run_new_supplier_parsing()
+
+            print("\n[9/12] 正在提取全量核心概览指标...")
             run_enhanced_metrics()
             
-            print("\n[9/10] 正在创作可视化看板...")
+            print("\n[10/12] 正在创作可视化看板...")
             run_dashboard_output()
-            print("\n[10/11] 正在全量集成终极运营报告数据...")
+            
+            print("\n[11/12] 正在全量集成终极运营报告数据...")
             run_data_combine()
-            print("\n[11/11] 正在植入高清图表至报告...")
+            
+            print("\n[12/12] 正在植入高清图表至报告...")
             run_charts_combine()
+
 
 
 

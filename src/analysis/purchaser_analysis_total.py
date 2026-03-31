@@ -3,15 +3,7 @@ import yaml
 import os
 
 
-def load_config():
-    """加载YAML配置文件"""
-    # 兼容处理：尝试当前目录及上级目录（针对工程整理后的路径）
-    paths = ["config.yaml", "source/config.yaml", "../source/config.yaml"]
-    for p in paths:
-        if os.path.exists(p):
-            with open(p, "r", encoding="utf-8") as f:
-                return yaml.safe_load(f)
-    raise FileNotFoundError("无法找到 config.yaml，请检查路径。")
+from ..core import load_config
 
 
 def run_purchaser_analysis():

@@ -3,14 +3,7 @@ import yaml
 import os
 import traceback
 
-def load_config():
-    """自动路径识别的配置加载"""
-    paths = ["config.yaml", "source/config.yaml", "../source/config.yaml"]
-    for p in paths:
-        if os.path.exists(p):
-            with open(p, "r", encoding="utf-8") as f:
-                return yaml.safe_load(f)
-    raise FileNotFoundError("无法找到 config.yaml，请检查路径。")
+from ..core import load_config
 
 def run_enhanced_metrics():
     print("正在基于 [全量历史与清洗报表] 补齐核心话术模板遗落指标 (KV字典)...")
@@ -105,9 +98,10 @@ def run_enhanced_metrics():
             # 获取有效的供应商（非空且非汇总行）作为后续统计的基础范围
             valid_sup_mask = ~valid_sups.isin(['nan', 'None', '', '汇总', '合计'])
             
-            # {{供应商数量}}：针对所有有效记录去重
+            # {{供应商数量}} 和 {{供应商总数}}：针对所有有效记录去重
             total_sup = valid_sups[valid_sup_mask].nunique()
             kv_data['{{供应商数量}}'] = str(total_sup)
+            kv_data['{{供应商总数}}'] = str(total_sup)
             
             # 根据“供应商类型”列判断是否为电商（不再使用硬编码关键词库）
             if '供应商类型' in df_raw.columns:
@@ -125,6 +119,7 @@ def run_enhanced_metrics():
             kv_data['{{本地供应商数量}}'] = str(local_count)
         else:
             kv_data['{{供应商数量}}'] = "0"
+            kv_data['{{供应商总数}}'] = "0"
             kv_data['{{电商数量}}'] = "0"
             kv_data['{{本地供应商数量}}'] = "0"
     except Exception as e:

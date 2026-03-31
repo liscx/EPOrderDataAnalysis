@@ -4,9 +4,9 @@ analysis_period:
 execution_mode: all
 file_config:
   input_file: "D:/OrderDataHandle/\u9633\u5149\u4F18\u91C7\u4EA4\u6613\u8BA2\u5355\
-    \u6E05\u6D17\u6570\u636E.xlsx"
-  output_file: "C:\\Users\\32300\\Desktop\\\u9633\u5149\u4F18\u91C7\\\u6708\u62A5\u76F8\
-    \u5173\\2\u6708\u62A5\\\u6570\u636E\u6E05\u6D17\u6C47\u603B\u7ED3\u679C.xlsx"
+    2\u6708.xlsx"
+  output_file: "D:\\OrderDataHandle\\result\\\u4E09\u6708\\\u6570\u636E\u6E05\u6D17\
+    \u6C47\u603B\u7ED3\u679C.xlsx"
 report_settings:
   report_mode: "\u65F6\u95F4\u7EF4\u5EA6"
   use_period_data: N

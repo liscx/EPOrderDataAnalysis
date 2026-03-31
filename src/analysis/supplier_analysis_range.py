@@ -4,17 +4,7 @@ import yaml
 import os
 
 
-def load_config():
-    """加载YAML配置文件"""
-    # 如果你整理了工程，确保路径指向正确，例如 "source/config.yaml"
-    # 这里建议根据实际情况修改
-    config_path = "config.yaml"
-    if not os.path.exists(config_path):
-        # 尝试向上寻找一级 (针对 main/GUI.py 运行的情况)
-        config_path = os.path.join("..", "source", "config.yaml")
-
-    with open(config_path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from ..core import load_config
 
 
 def run_range_supplier_top10():

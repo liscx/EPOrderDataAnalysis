@@ -3,10 +3,7 @@ import yaml
 import os
 
 
-def load_config():
-    """加载YAML配置文件"""
-    with open("config.yaml", "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from ..core import load_config
 
 
 def run_supplier_analysis():

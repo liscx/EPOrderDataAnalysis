@@ -3,14 +3,7 @@ import yaml
 import os
 
 
-def load_config():
-    """加载YAML配置文件"""
-    paths = ["config.yaml", "source/config.yaml", "../source/config.yaml"]
-    for p in paths:
-        if os.path.exists(p):
-            with open(p, "r", encoding="utf-8") as f:
-                return yaml.safe_load(f)
-    raise FileNotFoundError("无法找到 config.yaml")
+from ..core import load_config
 
 
 def run_range_purchaser_top10():

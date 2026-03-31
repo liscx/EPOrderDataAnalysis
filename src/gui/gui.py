@@ -10,6 +10,7 @@ import io
 import os
 
 from src.analysis import start_analysis_flow
+from src.core.config import get_base_dir, load_config
 
 THEME_DATA = {
     "Dark": {"bg": "#0d1117", "card": "#161b22", "border": "#30363d", "text": "#f0f6fc", "input_bg": "#010409",
@@ -26,8 +27,23 @@ class ModernAnalysisGUI(ctk.CTk):
         self.geometry("480x600")
         self.resizable(False, False)
 
-        self.config_path = 'config.yaml'
+        # 确保 config.yaml 始终相对于工程根目录定位 (兼容 EXE)
+        base_dir = get_base_dir()
+        self.config_path = os.path.join(base_dir, 'config.yaml')
         self.config = self.init_config()
+
+        # --- 路径自愈逻辑：分发给他人后，自动修正失效的绝对路径 ---
+        if 'file_config' in self.config:
+            for key in ['input_file', 'output_file', 'template_file']:
+                path = self.config['file_config'].get(key, "")
+                if path and not os.path.exists(path):
+                    # 尝试在 EXE 同级目录找同名文件
+                    filename = os.path.basename(path)
+                    guess = os.path.join(base_dir, filename)
+                    if os.path.exists(guess):
+                        self.config['file_config'][key] = os.path.abspath(guess)
+        # ---------------------------------------------------
+
         self.appearance_mode = self.config.get('theme', 'Dark')
         ctk.set_appearance_mode(self.appearance_mode)
 
@@ -150,8 +166,8 @@ class ModernAnalysisGUI(ctk.CTk):
         else:
             d = filedialog.askdirectory()
             if d:
-                # 自动拼接文件名
-                full_path = os.path.join(d, "数据清洗汇总结果.xlsx").replace("/", "\\")
+                # 自动拼接文件名并强制转换为绝对路径，解决相对路径失效问题
+                full_path = os.path.abspath(os.path.join(d, "数据清洗汇总结果.xlsx"))
                 self.out_entry.delete(0, "end")
                 self.out_entry.insert(0, full_path)
 
@@ -184,8 +200,17 @@ class ModernAnalysisGUI(ctk.CTk):
             self.run_btn.configure(state="normal", text="Run Analysis")
 
     def save_config(self):
+        # 在保存前，将 entry 中的路径尝试转换为绝对路径（如果用户手动输入了相对路径）
+        in_file = self.input_entry.get().strip()
+        out_file = self.out_entry.get().strip()
+        
+        if in_file and not os.path.isabs(in_file):
+            in_file = os.path.abspath(in_file)
+        if out_file and not os.path.isabs(out_file):
+            out_file = os.path.abspath(out_file)
+
         self.config.update({
-            'file_config': {'input_file': self.input_entry.get(), 'output_file': self.out_entry.get()},
+            'file_config': {'input_file': in_file, 'output_file': out_file},
             'analysis_period': {'start_date': self.start_date.get(), 'end_date': self.end_date.get()},
             'theme': self.appearance_mode
         })

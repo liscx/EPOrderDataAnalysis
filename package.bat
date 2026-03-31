@@ -1,4 +1,6 @@
 @echo off
+chcp 65001 >nul
+set PYTHONIOENCODING=utf-8
 title DataEngine 打包程序
 echo ========================================
 echo   [打包任务] 正在为 DataEngine 生成 exe...
@@ -8,9 +10,11 @@ echo ========================================
 pyinstaller --noconsole ^
 --onefile ^
 --collect-all customtkinter ^
---icon="app_icon.ico" ^
+--collect-all selenium ^
+--add-data "resources;resources" ^
 --name "DataEngine" ^
 GUI.py
+
 
 if %ERRORLEVEL% EQU 0 (
     echo.

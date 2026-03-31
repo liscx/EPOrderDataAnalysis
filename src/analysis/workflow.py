@@ -62,12 +62,12 @@ def start_analysis_flow(config):
             
             print("\n[9/10] 正在创作可视化看板...")
             run_dashboard_output()
-
-            print("\n[10/11] 正在植入高清图表至报告...")
+            print("\n[10/11] 正在全量集成终极运营报告数据...")
+            run_data_combine()
+            print("\n[11/11] 正在植入高清图表至报告...")
             run_charts_combine()
 
-            print("\n[11/11] 正在全量集成终极运营报告数据...")
-            run_data_combine()
+
 
             end_time = time.time()
             print("\n" + "=" * 50)

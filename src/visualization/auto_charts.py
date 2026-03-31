@@ -7,6 +7,10 @@ from pyecharts import options as opts
 from pyecharts.charts import Pie, Line, Bar, Page
 from pyecharts.globals import CurrentConfig
 
+# 针对 CDN 访问慢问题的核心优化：
+# 强制使用国内高效的 BootCDN 镜像，确保 Pyecharts 基件能瞬间加载
+CurrentConfig.ONLINE_HOST = "https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/"
+
 def get_base_dir():
     """获取根目录，兼容普通运行与 PyInstaller 打包环境"""
     if getattr(sys, 'frozen', False):
@@ -14,10 +18,7 @@ def get_base_dir():
     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def load_config():
-    """直接读取本地 config.yaml"""
-    with open("config.yaml", "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from ..core import load_config
 
 
 def get_base_data(file_path):
@@ -65,7 +66,10 @@ def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False, cha
     data = [(str(row['Label']), round(float(row[val_col]), 2)) for _, row in plot_df.iterrows() if row[val_col] > 0]
 
     return (
-        Pie(init_opts=opts.InitOpts(chart_id=chart_id, width="1000px", height="600px", bg_color="white"))
+        Pie(init_opts=opts.InitOpts(
+            chart_id=chart_id, width="1000px", height="600px", bg_color="white",
+            animation_opts=opts.AnimationOpts(animation=False)
+        ))
         .add("", data, radius=["35%", "65%"])
         .set_global_opts(
             title_opts=opts.TitleOpts(title=title, pos_left="center"),
@@ -97,7 +101,10 @@ def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=Fal
     ml_data = [[{"coord": [x_data[i], y_data[i]]}, {"coord": [x_data[i], 0]}] for i in range(len(x_data))]
 
     return (
-        Line(init_opts=opts.InitOpts(chart_id=chart_id, width="1000px", height="500px", bg_color="white"))
+        Line(init_opts=opts.InitOpts(
+            chart_id=chart_id, width="1000px", height="500px", bg_color="white",
+            animation_opts=opts.AnimationOpts(animation=False)
+        ))
         .add_xaxis(x_data)
         .add_yaxis(
             series_name=title, y_axis=y_data, is_smooth=False, symbol="circle", symbol_size=8,
@@ -131,7 +138,10 @@ def create_bar_component(df, title, x_col, y_col, chart_id=None):
     y_axis_max = int(max(y_values) * 1.2) if y_values and max(y_values) > 0 else None
 
     return (
-        Bar(init_opts=opts.InitOpts(chart_id=chart_id, width="1000px", height="500px", bg_color="white"))
+        Bar(init_opts=opts.InitOpts(
+            chart_id=chart_id, width="1000px", height="500px", bg_color="white",
+            animation_opts=opts.AnimationOpts(animation=False)
+        ))
         .add_xaxis(x_data)
         .add_yaxis(
             "金额", y_values, color="#409EFF", category_gap="45%",

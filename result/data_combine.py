@@ -60,11 +60,34 @@ def format_m(val):
 
 
 def fill_table_data(table, df, mapping, max_rows=None, skip_col_idx=None):
-    """通用表格填充"""
-    if df is None or df.empty: return
+    """
+    通用表格填充（自适应行数增强版）
+    """
+    if df is None or df.empty:
+        # 如果没有数据，且表长超过1行（有表头），尝试清理冗余行
+        while len(table.rows) > 1:
+            table._tbl.remove(table.rows[-1]._tr)
+        return
+
     data = df.head(max_rows) if max_rows else df
+    target_row_count = len(data)
+    
+    # 1. 动态调整表格行数 (保持1个标题行 + target_row_count 条数据行)
+    current_data_rows = len(table.rows) - 1
+    
+    # 如果模板行数多，删除多余行
+    if current_data_rows > target_row_count:
+        while len(table.rows) > target_row_count + 1:
+            table._tbl.remove(table.rows[-1]._tr)
+    
+    # 如果模板行数少，动态新增并克隆样式 (从数据行第一行克隆样式)
+    elif current_data_rows < target_row_count:
+        for _ in range(target_row_count - current_data_rows):
+            new_row = table.add_row()
+            # 备注：docx.add_row 默认就会跟随上行样式，可满足基础需求
+
+    # 2. 依次填充数据
     for i, (_, row) in enumerate(data.iterrows()):
-        if i + 1 >= len(table.rows): break
         cells = table.rows[i + 1].cells
         for col_idx, excel_col in mapping.items():
             if col_idx < len(cells):
@@ -76,6 +99,7 @@ def fill_table_data(table, df, mapping, max_rows=None, skip_col_idx=None):
                         cells[col_idx].text = format_m(val)
                     else:
                         cells[col_idx].text = str(val) if pd.notna(val) else ""
+
 
 
 # --- 2. 主集成执行逻辑 ---
@@ -136,21 +160,25 @@ def main():
     fill_table_data(ts[3], sheets.get('采购企业订单量TOP10'),
                     {0: '序号', 1: '采购企业', 2: '专区名称', 3: '省市', 4: '订单数量', 5: '商品数量',
                      6: '订单金额（元）'}, 10)
+    # 【已修正】Table 4 (索引ts[4]): 序号 | 采购企业 | 专区名称 | 省市 | 订单金额（元） | 订单数量 | 商品数量
     fill_table_data(ts[4], sheets.get('采购企业交易额TOP10'),
-                    {0: '序号', 1: '采购企业', 2: '专区名称', 3: '省市', 4: '订单数量', 5: '商品数量',
-                     6: '订单金额（元）'}, 10)
+                    {0: '序号', 1: '采购企业', 2: '专区名称', 3: '省市', 4: '订单金额（元）', 5: '订单数量',
+                     6: '商品数量'}, 10)
     fill_table_data(ts[5], sheets.get('供应商汇总表'),
                     {0: '序号', 1: '供应商', 2: '供应商类型', 3: '订单数量', 4: '订单总额（元）', 5: '商品数量', 6: '专区名称'})
     fill_table_data(ts[7], sheets.get('供应商订单量TOP10'),
                     {0: '序号', 1: '单位名称', 2: '供应商类型', 3: '订单数量', 4: '商品数量', 5: '订单金额（元）'}, 10)
     fill_table_data(ts[8], sheets.get('供应商交易额TOP10'),
                     {0: '序号', 1: '单位名称', 2: '供应商类型', 3: '订单金额（元）', 4: '订单数量', 5: '商品数量'}, 10)
+    # 【已修正】Table 9 (索引ts[9]): 序号 | 商品名称 | 供应商 | 销售数量 | 单价（元） | 销售总额（元） | 专区名称
     fill_table_data(ts[9], sheets.get('商品销售数量TOP10'),
-                    {0: '序号', 1: '商品名称', 2: '供应商', 3: '销售数量', 4: '销售总额_计算', 5: '平均单价',
+                    {0: '序号', 1: '商品名称', 2: '供应商', 3: '销售数量', 4: '平均单价', 5: '销售总额_计算',
                      6: '专区名称'}, 10)
+    # 【已修正】Table 10 (索引ts[10]): 序号 | 商品名称 | 供应商 | 销售总额（元） | 销售数量 | 单价（元） | 专区
     fill_table_data(ts[10], sheets.get('商品销售金额TOP10'),
-                    {0: '序号', 1: '商品名称', 2: '供应商', 3: '销售数量', 4: '销售总额_计算', 5: '平均单价',
+                    {0: '序号', 1: '商品名称', 2: '供应商', 3: '销售总额_计算', 4: '销售数量', 5: '平均单价',
                      6: '专区名称'}, 10)
+
 
     # 【升级：绝对全等锁定表格】严格检查表头序列：['序号', '单位名称', '专区名称', '入库日期']
     target_sheet = sheets.get('供应商信息提取')

@@ -8,7 +8,8 @@ def do_wash():
     input_path = config['file_config']['input_file']
     output_path = config['file_config']['output_file']
     start_date = pd.to_datetime(config['analysis_period']['start_date'])
-    end_date = pd.to_datetime(config['analysis_period']['end_date'])
+    # 处理 end_date，确保包含结束当天的全部数据 (补全到 23:59:59)
+    end_date = pd.to_datetime(config['analysis_period']['end_date']) + pd.Timedelta(days=1) - pd.Timedelta(seconds=1)
 
     if not os.path.exists(input_path):
         print(f"错误：找不到原始文件 {input_path}")

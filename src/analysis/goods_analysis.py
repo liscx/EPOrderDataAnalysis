@@ -11,7 +11,7 @@ def run_product_analysis():
     config = load_config()
     file_path = config['file_config']['output_file']
     start_date = config['analysis_period']['start_date']
-    end_date = config['analysis_period']['end_date']
+    end_date = pd.to_datetime(config['analysis_period']['end_date']) + pd.Timedelta(days=1) - pd.Timedelta(seconds=1)
 
     if not os.path.exists(file_path):
         return
@@ -25,7 +25,7 @@ def run_product_analysis():
     if df_p.empty:
         df = all_sheets['清洗后数据'].copy()
         df['订单日期'] = pd.to_datetime(df['订单日期'], errors='coerce')
-        mask = (df['订单日期'] >= pd.to_datetime(start_date)) & (df['订单日期'] <= pd.to_datetime(end_date))
+        mask = (df['订单日期'] >= pd.to_datetime(start_date)) & (df['订单日期'] <= end_date)
         df_p = df.loc[mask].copy()
 
     # 2. 【数据对齐校准】

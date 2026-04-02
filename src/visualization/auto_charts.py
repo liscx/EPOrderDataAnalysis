@@ -6,6 +6,7 @@ import os
 from pyecharts import options as opts
 from pyecharts.charts import Pie, Line, Bar, Page
 from pyecharts.globals import CurrentConfig
+from pyecharts.commons.utils import JsCode
 
 # 针对 CDN 访问慢问题的核心优化：
 # 强制使用国内高效的 BootCDN 镜像，确保 Pyecharts 基件能瞬间加载
@@ -67,13 +68,13 @@ def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False, cha
 
     return (
         Pie(init_opts=opts.InitOpts(
-            chart_id=chart_id, width="1200px", height="750px", bg_color="white",
+            chart_id=chart_id, width="1400px", height="800px", bg_color="white",
             animation_opts=opts.AnimationOpts(animation=False)
         ))
 
         .add(
             "", data, 
-            radius=["40%", "70%"],
+            radius=["35%", "60%"],
             itemstyle_opts=opts.ItemStyleOpts(
                 border_width=2, border_color="white"
             )
@@ -90,12 +91,12 @@ def create_pie_component(df, title, attr_col, val_col, is_total_sheet=False, cha
         .set_series_opts(
             label_opts=opts.LabelOpts(
                 is_show=True, position="outside", font_size=22, 
-                formatter="{b}: {c}元",
+                formatter="{b}\n{c}元",
                 background_color="white",
                 border_color="#409EFF",
-                border_width=1, 
-                border_radius=4,
-                padding=[8, 12]
+                border_width=2, 
+                border_radius=6,
+                padding=[12, 20] 
             )
         )
 
@@ -133,9 +134,10 @@ def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=Fal
 
     return (
         Line(init_opts=opts.InitOpts(
-            chart_id=chart_id, width="1200px", height="650px", bg_color="white",
+            chart_id=chart_id, width="1200px", height="800px", bg_color="white",
             animation_opts=opts.AnimationOpts(animation=False)
         ))
+
 
         .add_xaxis(x_data)
         .add_yaxis(
@@ -162,24 +164,28 @@ def create_line_component(df, title, x_col=None, y_col=None, is_item_nunique=Fal
             title_opts=opts.TitleOpts(
                 title=title,
                 pos_left="center", pos_top="5",
-                title_textstyle_opts=opts.TextStyleOpts(font_size=32), # 恢复 32px
+                title_textstyle_opts=opts.TextStyleOpts(font_size=32), 
                 subtitle_textstyle_opts=opts.TextStyleOpts(font_size=16, color="#909399")
             ),
             legend_opts=opts.LegendOpts(is_show=False),
             toolbox_opts=opts.ToolboxOpts(is_show=False),
             xaxis_opts=opts.AxisOpts(
-                axislabel_opts=opts.LabelOpts(font_size=20), # 恢复 20px
+                axislabel_opts=opts.LabelOpts(font_size=20),
+                axisline_opts=opts.AxisLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(color="#606266")),
                 axistick_opts=opts.AxisTickOpts(is_show=True),
                 splitline_opts=opts.SplitLineOpts(is_show=False)
             ),
             yaxis_opts=opts.AxisOpts(
-                axislabel_opts=opts.LabelOpts(font_size=20), # 恢复 20px
+                max_=int(max(y_data) * 1.3) if y_data and max(y_data) > 0 else None,
+                axislabel_opts=opts.LabelOpts(font_size=20),
+                axisline_opts=opts.AxisLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(color="#606266")),
                 splitline_opts=opts.SplitLineOpts(
                     is_show=True, 
                     linestyle_opts=opts.LineStyleOpts(type_="dashed", opacity=0.1)
                 )
             ),
         )
+
 
 
 
@@ -226,11 +232,13 @@ def create_bar_component(df, title, x_col, y_col, chart_id=None):
             toolbox_opts=opts.ToolboxOpts(is_show=False),
             xaxis_opts=opts.AxisOpts(
                 axislabel_opts=opts.LabelOpts(font_size=20),
+                axisline_opts=opts.AxisLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(color="#606266")),
                 splitline_opts=opts.SplitLineOpts(is_show=False)
             ),
             yaxis_opts=opts.AxisOpts(
                 max_=y_axis_max,
                 axislabel_opts=opts.LabelOpts(font_size=20),
+                axisline_opts=opts.AxisLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(color="#606266")),
                 splitline_opts=opts.SplitLineOpts(is_show=True, linestyle_opts=opts.LineStyleOpts(opacity=0.3))
             ),
         )

@@ -1,0 +1,954 @@
+{
+    "controls": [
+        {
+            "data": [
+                {
+                    "text": "所有",
+                    "id": "0"
+                },
+                {
+                    "text": "编辑中",
+                    "id": "1"
+                },
+                {
+                    "text": "待审核",
+                    "id": "2"
+                },
+                {
+                    "text": "审核通过",
+                    "id": "3"
+                },
+                {
+                    "text": "审核不通过",
+                    "id": "4"
+                }
+            ],
+            "id": "rblAuditstatus",
+            "value": "3"
+        },
+        {
+            "id": "tbZuZhiJGDM",
+            "value": ""
+        },
+        {
+            "data": [
+                {
+                    "text": "建设单位",
+                    "value": "11"
+                },
+                {
+                    "text": "自然人",
+                    "value": "5"
+                },
+                {
+                    "text": "采购单位",
+                    "value": "12"
+                },
+                {
+                    "text": "采购代理",
+                    "value": "21"
+                },
+                {
+                    "text": "拍卖代理",
+                    "value": "33"
+                },
+                {
+                    "text": "招标代理",
+                    "value": "18"
+                },
+                {
+                    "text": "竞买人",
+                    "value": "7"
+                },
+                {
+                    "text": "土地拍卖",
+                    "value": "44"
+                },
+                {
+                    "text": "咨询企业",
+                    "value": "42"
+                },
+                {
+                    "text": "设计单位",
+                    "value": "16"
+                },
+                {
+                    "text": "勘察单位",
+                    "value": "15"
+                },
+                {
+                    "text": "监理单位",
+                    "value": "14"
+                },
+                {
+                    "text": "项目管理",
+                    "value": "19"
+                },
+                {
+                    "text": "供应商",
+                    "value": "17"
+                },
+                {
+                    "text": "施工单位",
+                    "value": "13"
+                }
+            ],
+            "id": "dwdetailtype",
+            "value": ""
+        },
+        {
+            "id": "tbDanWeiName",
+            "value": ""
+        },
+        {
+            "data": [
+                {
+                    "text": "全部",
+                    "id": "all",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "齐齐哈尔阳光优采专区",
+                    "id": "qqhezq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "黑龙江要素平台电子商城",
+                    "id": "hljyszq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "邯郸市阳光优采平台",
+                    "id": "handanzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "聊城泰岳置业有限公司阳光优采平台",
+                    "id": "lctyzyzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "湛江市阳光优采平台",
+                    "id": "zhanjiangzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "泰安市e采通",
+                    "id": "taianect",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "株洲市国资委阳光优采专区",
+                    "id": "zzgzwygyc",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "曲阜国投阳光优采平台",
+                    "id": "qufuguotouzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "新疆阳光采购平台",
+                    "id": "xinjiangygyc",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "新疆光正阳光优采平台",
+                    "id": "xjgzzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "新疆丝路亚心数字科技发展有限公司阳光优采",
+                    "id": "siluyaxinzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "恩施州阳光优采平台",
+                    "id": "enshizq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "广东省南方联合产权阳光优采",
+                    "id": "nflhcqzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "安徽省阳光优采平台",
+                    "id": "anhuiygyc",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "大连市阳光采购服务平台",
+                    "id": "dlsygcgfwpt",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "国泰新点阳光优采专区",
+                    "id": "epointygyc",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "国弘热力阳光优采",
+                    "id": "qufuguohongzq",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "中资主站",
+                    "id": "ZhuZhan",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "中国煤地电子商城",
+                    "id": "zgmdzq",
+                    "tag": "",
+                    "group": ""
+                }
+            ],
+            "id": "searchzhuanqu",
+            "value": "all"
+        },
+        {
+            "data": [
+                {
+                    "text": "全部",
+                    "id": "all",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "企业法人",
+                    "id": "1",
+                    "tag": "",
+                    "group": ""
+                },
+                {
+                    "text": "个体工商户",
+                    "id": "2",
+                    "tag": "",
+                    "group": ""
+                }
+            ],
+            "id": "searchdanweitype",
+            "value": ""
+        },
+        {
+            "total": 61,
+            "data": [
+                {
+                    "unitorgnum": "92652301MA77WHEW8D",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·昌吉回族自治州·昌吉市",
+                    "danweiname": "昌吉市优美文化办公商行",
+                    "rukudate": "2026-03-26 18:38",
+                    "rowguid": "ef996941-2b07-4a7f-b231-540754080a6b",
+                    "tenantname": "新疆光正阳光优采平台",
+                    "gystype": "个体工商户"
+                },
+                {
+                    "unitorgnum": "91110116MA009QGJ4R",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·房山区",
+                    "danweiname": "北京中仪慧普科技有限公司",
+                    "rukudate": "2026-03-23 10:14",
+                    "rowguid": "b0c90ed8-6511-4d35-9845-8e27f912bf58",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "911101087560300741",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·大兴区",
+                    "danweiname": "润天恒业科技集团有限公司 ",
+                    "rukudate": "2026-03-18 17:46",
+                    "rowguid": "5369be69-e39e-4957-8247-f7d7e73819c9",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91410104586028472D",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "河南省·郑州市·管城回族区",
+                    "danweiname": "河南钢钢供应链管理有限公司",
+                    "rukudate": "2026-03-18 11:20",
+                    "rowguid": "648b4cb9-3df3-4b6c-88e4-db280ed8ce07",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320303MAEA85FD03",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·云龙区",
+                    "danweiname": "徐州聚泓顺商贸有限公司",
+                    "rukudate": "2026-03-16 12:26",
+                    "rowguid": "5b176aff-fb98-4548-a82e-05a7fd71f407",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91630104MA752TYJ6D",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "青海省·西宁市·城西区",
+                    "danweiname": "青海佳林商贸有限公司",
+                    "rukudate": "2026-03-12 14:51",
+                    "rowguid": "05292dbd-4925-438f-a998-7e44f1ac766f",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110108357964734Q",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·房山区",
+                    "danweiname": "北京谦文菡雅商贸有限公司",
+                    "rukudate": "2026-03-11 16:40",
+                    "rowguid": "e3c776f0-3bda-4019-be73-ee0945016e73",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "92652301MAC167BB12",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·昌吉回族自治州·昌吉市",
+                    "danweiname": "昌吉市思诺办公用品店",
+                    "rukudate": "2026-03-11 12:04",
+                    "rowguid": "f8055d19-84db-4f3f-9ca1-5f62a9ae0127",
+                    "tenantname": "新疆光正阳光优采平台",
+                    "gystype": "个体工商户"
+                },
+                {
+                    "unitorgnum": "913203120893173295",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·铜山区",
+                    "danweiname": "徐州泰瑞仪器设备有限公司",
+                    "rukudate": "2026-03-11 10:51",
+                    "rowguid": "3c541956-bff0-44e1-a897-0017c77b56c4",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91610131566024992B",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "陕西省·西安市·雁塔区",
+                    "danweiname": "西安诚安测控科技有限公司",
+                    "rukudate": "2026-03-10 16:36",
+                    "rowguid": "03fdf059-03d0-48c9-9302-119b22a487e2",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320102MA26722102",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·南京市·玄武区",
+                    "danweiname": "南京誉天电子科技有限公司",
+                    "rukudate": "2026-03-10 11:19",
+                    "rowguid": "66e5cea0-376b-4f84-9ee0-b795fa97bec6",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "86508744D679EPF96U",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·乌鲁木齐市·天山区",
+                    "danweiname": "国泰测试新疆光正采购人02",
+                    "rukudate": "2026-03-10 09:01",
+                    "rowguid": "cf6623ac-5249-42f7-ab28-a598f2efc871",
+                    "tenantname": "新疆光正阳光优采平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "92320311MA1RN4ND2U",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·泉山区",
+                    "danweiname": "徐州市文佳办公用品经营部",
+                    "rukudate": "2026-03-09 13:49",
+                    "rowguid": "2694ece0-35a3-493c-a665-4cba3ddc70e3",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "个体工商户"
+                },
+                {
+                    "unitorgnum": "91653122MAD01KKWXX",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·喀什地区·疏勒县",
+                    "danweiname": "喀什雨荣商贸有限公司",
+                    "rukudate": "2026-03-04 13:37",
+                    "rowguid": "82096e44-da44-4b02-ab50-28c4f3b44780",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "913203117395990742",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·泉山区",
+                    "danweiname": "徐州德普机电科技有限公司",
+                    "rukudate": "2026-03-04 08:43",
+                    "rowguid": "509bef7c-0b87-439d-8806-1dca92ca3b92",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91330100MA27XCM69B",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "浙江省·杭州市·滨江区",
+                    "danweiname": "杭州网易严选贸易有限公司",
+                    "rukudate": "2026-03-03 15:02",
+                    "rowguid": "d106f2d3-acba-417a-b507-b2c8460e43ae",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91650203MA78RC4G32",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·克拉玛依市·克拉玛依区",
+                    "danweiname": "新疆申基生物科技有限公司",
+                    "rukudate": "2026-03-03 13:14",
+                    "rowguid": "e24fa66e-6559-4ba5-92ef-c080a3e4d0c8",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91653122333186595J",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·喀什地区·疏勒县",
+                    "danweiname": "喀什俊龙汽车服务有限公司",
+                    "rukudate": "2026-03-03 12:58",
+                    "rowguid": "73f50500-4b56-4401-8033-483b31191d8a",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91310112MA1GBRC54F",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "上海市·闵行区",
+                    "danweiname": "上海方酋机器人有限公司",
+                    "rukudate": "2026-03-03 10:10",
+                    "rowguid": "093b2ff5-aacd-494d-a07b-452a3eb681e3",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320302MA7ETC345K",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·鼓楼区",
+                    "danweiname": "徐州正刚金属材料有限公司",
+                    "rukudate": "2026-03-02 10:25",
+                    "rowguid": "d7b359f3-f378-4ef0-bbe7-8422f80055f6",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91440111054503711K",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "广东省·广州市·白云区",
+                    "danweiname": "广东麦盾安全设备有限公司",
+                    "rukudate": "2026-02-27 10:03",
+                    "rowguid": "c81fd460-5812-4d62-b998-5ae7e1578a1d",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320106MADX9DGH6W",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·南京市·鼓楼区",
+                    "danweiname": "南京优亚逸信息技术有限公司",
+                    "rukudate": "2026-02-05 20:03",
+                    "rowguid": "26b51f69-ed04-4592-b5b0-92610dfe06f0",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320311MA1N5BYM3Y",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·泉山区",
+                    "danweiname": "江苏建勘岩土工程有限公司",
+                    "rukudate": "2026-02-25 11:02",
+                    "rowguid": "12a6fd6c-cc6d-4f21-9793-71ae6d21b414",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "913203033309212753",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·云龙区",
+                    "danweiname": "徐州尚锦商贸有限公司",
+                    "rukudate": "2026-02-10 09:12",
+                    "rowguid": "a2c1cc30-785a-44c7-a943-9e9b2c91474c",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91410782MA46HXK93E",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "河南省·新乡市·辉县市",
+                    "danweiname": "新乡先卓机械设备有限公司",
+                    "rukudate": "2026-02-09 16:13",
+                    "rowguid": "b5b334ad-f110-4037-b00b-d2ad1c05cad7",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "752206320MNBK5FP99",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "安徽省·合肥市·市辖区",
+                    "danweiname": "国泰测试供应商0229",
+                    "rukudate": "2026-02-09 13:52",
+                    "rowguid": "479c2117-f2d5-4403-b05b-a91710079937",
+                    "tenantname": "安徽省阳光优采平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320303591169528M",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·云龙区",
+                    "danweiname": "徐州江琦商贸有限公司",
+                    "rukudate": "2026-02-09 11:39",
+                    "rowguid": "29482f32-6bc4-45ef-b258-a1ae5a925da5",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91350200612028610M",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "福建省·厦门市·集美区",
+                    "danweiname": "林德气体（厦门）有限公司",
+                    "rukudate": "2026-02-09 10:42",
+                    "rowguid": "7224771f-f7cc-4a7c-82dd-b807a5c04a95",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91130901MA0DHF4N68",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "河北省·沧州市·市辖区",
+                    "danweiname": "中能化（河北）新能源汽车产业有限公司",
+                    "rukudate": "2026-02-07 09:45",
+                    "rowguid": "2f05e70e-55e7-4f10-8a7d-46f5dba16e3f",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "0363043187H4532QY7",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "国泰测试新疆光正供应商001",
+                    "rukudate": "2026-02-06 13:48",
+                    "rowguid": "a2ae273c-2a86-4edc-9198-6e8f69fe081e",
+                    "tenantname": "新疆光正阳光优采平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "92330104MA2BMWFX35",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "浙江省·杭州市·江干区",
+                    "danweiname": "杭州市江干区黔磐电脑商行",
+                    "rukudate": "2026-02-06 11:15",
+                    "rowguid": "be673011-cb53-44d9-a5ec-585f2bf83994",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91370881MA3BXK496N",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "山东省·济宁市·曲阜市",
+                    "danweiname": "曲阜煜腾商贸有限公司",
+                    "rukudate": "2026-02-06 07:17",
+                    "rowguid": "5c184e95-4d64-4090-8038-8ed852d22fa1",
+                    "tenantname": "国弘热力阳光优采",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110000710929930X",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "天津市·河东区",
+                    "danweiname": "国泰新点软件股份有限公司25国泰测试",
+                    "rukudate": "2026-02-05 21:44",
+                    "rowguid": "14fa78bb-baa7-4a33-8529-3e9e5d9e4126",
+                    "tenantname": "邯郸市阳光优采平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91610103592247057R",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "陕西省·西安市·碑林区",
+                    "danweiname": "西安富百电子科技有限责任公司",
+                    "rukudate": "2026-02-05 12:12",
+                    "rowguid": "b8154016-51e9-486a-acca-f73c4f619a36",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91130681067022247T",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "河北省·保定市·涿州市",
+                    "danweiname": "涿州市天怡商贸有限公司",
+                    "rukudate": "2026-02-03 16:14",
+                    "rowguid": "b2a04202-47b3-4afe-a271-13dfe6f76a26",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91610825MA7035QG6M",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "陕西省·榆林市·定边县",
+                    "danweiname": "陕西佰瑞达新能源科技发展有限公司",
+                    "rukudate": "2026-02-03 16:08",
+                    "rowguid": "450f6597-0e4c-42ea-a1b9-3b7bb9b81450",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91630105091615798K",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "青海省·西宁市·城北区",
+                    "danweiname": "青海知亿诚科电子科技有限公司",
+                    "rukudate": "2026-01-28 16:48",
+                    "rowguid": "ca78ff32-958d-463b-9b57-fd5f72f1bf48",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91330110143917553B",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "浙江省·杭州市·余杭区",
+                    "danweiname": "杭州南方环境净化设备有限公司",
+                    "rukudate": "2026-01-28 15:15",
+                    "rowguid": "f2d593f9-82af-4da0-99e6-3a8cad4a2a53",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91650102552449092U",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·乌鲁木齐市·天山区",
+                    "danweiname": "新疆文木金华信息技术有限公司",
+                    "rukudate": "2026-01-28 11:37",
+                    "rowguid": "dc0eefc9-2b8f-4238-8cd3-f95717dcb95e",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "916501025847944215",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·乌鲁木齐市·天山区",
+                    "danweiname": "新疆博浩创新教育科技有限公司",
+                    "rukudate": "2026-01-28 11:01",
+                    "rowguid": "db633797-cfc3-4065-8005-747972f77364",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110108MA007NW87C",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·海淀区",
+                    "danweiname": "北京安帝科技有限公司",
+                    "rukudate": "2026-01-27 15:45",
+                    "rowguid": "62d1bfe7-9479-4906-be31-231c0d887a1f",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91630104MABJ9BM03J",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "青海省·西宁市·城西区",
+                    "danweiname": "青海友德商贸有限公司",
+                    "rukudate": "2026-01-27 10:12",
+                    "rowguid": "6ab5bddb-6e36-47c9-b7e0-87ffd430f29a",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "916531007898953492",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·喀什地区·疏勒县",
+                    "danweiname": "喀什昆仑维吾尔药业有限公司",
+                    "rukudate": "2026-01-23 12:26",
+                    "rowguid": "1506c9af-9c47-4525-9cc0-ffde5ea30959",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320303067675432C",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·徐州市·云龙区",
+                    "danweiname": "徐州鑫驰办公设备有限公司",
+                    "rukudate": "2026-01-23 12:07",
+                    "rowguid": "cfc59fc8-0f4d-497a-98bd-01e88b097ced",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "911301235296937679",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "邯郸测试供应商03",
+                    "rukudate": "2025-12-13 15:30",
+                    "rowguid": "6bcab8fe-97a1-4e24-a4cb-dbc8af01c1e0",
+                    "tenantname": "邯郸市阳光优采平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91530103MAK4B9482G",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·南京市·玄武区",
+                    "danweiname": "新疆测试供应商2",
+                    "rukudate": "2025-12-13 17:27",
+                    "rowguid": "ab0dfe77-6996-4d21-be83-e7d1e539cc1f",
+                    "tenantname": "新疆阳光采购平台",
+                                    },"gystype": "企业法人"
+
+                {
+                    "unitorgnum": "91120105649125481C",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "国泰测试聊城供应商账号",
+                    "rukudate": "2026-01-22 19:29",
+                    "rowguid": "f4f3e376-b89b-4eec-bf3b-425df823388f",
+                    "tenantname": "聊城泰岳置业有限公司阳光优采平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110108718776991D",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·海淀区",
+                    "danweiname": "正元伟业商业集团有限公司",
+                    "rukudate": "2026-01-22 09:37",
+                    "rowguid": "674d5aec-efd8-4094-808e-da71b82c07cd",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91650105MA7LRGN65P",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "新疆维吾尔自治区·乌鲁木齐市·水磨沟区",
+                    "danweiname": "新疆创顺科技发展有限公司",
+                    "rukudate": "2026-01-20 13:11",
+                    "rowguid": "138cf682-c949-43f5-8725-1aa5d25f84f8",
+                    "tenantname": "新疆阳光采购平台",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91120112893695494R",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "天津市·河东区",
+                    "danweiname": "甘肃企业交易刘氏测试公司",
+                    "rukudate": "2026-01-19 16:43",
+                    "rowguid": "393b720a-79ec-4394-8f86-64c38073cf17",
+                    "tenantname": "泰安市e采通",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91320106MA26QAT18A",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "江苏省·南京市·秦淮区",
+                    "danweiname": "快购达集团有限公司",
+                    "rukudate": "2026-01-16 19:20",
+                    "rowguid": "8eba98da-5380-4608-9fbd-5f9dd299106c",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110108348398611G",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "壹壹陆国泰测试供应商",
+                    "rukudate": "2026-01-16 10:41",
+                    "rowguid": "1949f15b-e111-4df0-ac73-759049cb0881",
+                    "tenantname": "株洲市国资委阳光优采专区",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91120000305114957Q",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "国泰测试曲阜供应商0115",
+                    "rukudate": "2026-01-15 21:30",
+                    "rowguid": "27e15cda-6e32-4d0b-9b2b-71c7dfde72cc",
+                    "tenantname": "国弘热力阳光优采",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "911302079618810032",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "国泰测试供应商0114",
+                    "rukudate": "2026-01-14 16:01",
+                    "rowguid": "178193a1-ded5-45c1-9791-03f62e7fb272",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "9111011679407940XC",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·怀柔区",
+                    "danweiname": "北京鸿昌一创文具礼品有限责任公司",
+                    "rukudate": "2026-01-09 16:40",
+                    "rowguid": "6c423a15-b6ad-45c0-9875-5b4b386fb2a7",
+                    "tenantname": "中国煤地电子商城",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91370900MA3CEXPW05",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "山东省·泰安市",
+                    "danweiname": "泰安轶通数码科技有限公司",
+                    "rukudate": "2026-01-09 14:44",
+                    "rowguid": "3e9592c5-f4f0-45a6-8981-1e6b04734c23",
+                    "tenantname": "泰安市e采通",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110108802090204U",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·海淀区",
+                    "danweiname": "北京边华电化学分析仪器有限公司",
+                    "rukudate": "2026-01-09 10:15",
+                    "rowguid": "d024f557-f827-4764-96b5-16768ca1f567",
+                    "tenantname": "国弘热力阳光优采",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "911304287703089845",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·东城区",
+                    "danweiname": "国泰测试单位lxy",
+                    "rukudate": "2025-12-22 10:08",
+                    "rowguid": "29e6137f-6518-4d57-8049-7eb3a0ab2f37",
+                    "tenantname": "泰安市e采通",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "92370902MA3JQWAY0W",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "山东省·泰安市·市辖区",
+                    "danweiname": "泰安市泰山区宏泽办公设备服务中心",
+                    "rukudate": "2026-01-06 17:41",
+                    "rowguid": "46766190-ae47-4bca-b9a0-4008d49fe762",
+                    "tenantname": "泰安市e采通",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "12560572Y2A0JN17C9",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·丰台区",
+                    "danweiname": "中资SAAS主站",
+                    "rukudate": "2025-09-25 17:48",
+                    "rowguid": "d9ac23e5-6445-4abd-9090-8a30e83743e3",
+                    "tenantname": "tenantguid:暂未配置专区",
+                    "gystype": "企业法人"
+                },
+                {
+                    "unitorgnum": "91110114MA01WL1K6T",
+                    "auditstatus": "验证通过",
+                    "dwdetailtype": "",
+                    "areaname": "北京市·市辖区·东城区",
+                    "danweiname": "鑫方盛控股集团有限公司",
+                    "rukudate": "2025-08-20 14:02",
+                    "rowguid": "f5c6c414-25c7-4ca2-b7af-db76e6fabe74",
+                    "tenantname": "tenantguid:暂未配置专区",
+                    "gystype": "企业法人"
+                }
+            ],
+            "pageSize": 100,
+            "id": "datagrid"
+        },
+        {
+            "id": "_common_hidden_viewdata",
+            "value": "{\"epoint_user_loginid\":\"6DA7736BC684C30DA4C9021747604A05\",\"pageurl\":\"f33a177e01a5f44b257b9257cfac991ac35241955e527ffd00e7ba2111d3d59ff71d1e00250f8a67648cdf2e06e6465624e8b4efc3b21ecefe230cdc86d590b5\",\"ViewType\":\"1\"}"
+        }
+    ],
+    "custom": {
+        "showreset": "0",
+        "showToolbar": true,
+        "radioShow": "",
+        "huiYuanShowDel": false,
+        "showAdd": true,
+        "isusechain": "1",
+        "showModify": true,
+        "huiYuanShowAdd": true,
+        "showDel": true,
+        "caSecurityGuid": "3ee1e75c-e13f-4ebe-97d4-930ed1f16eb5"
+    },
+    "status": {
+        "code": "1",
+        "text": "",
+        "url": "",
+        "state": "error"
+    }
+}

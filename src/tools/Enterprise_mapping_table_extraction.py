@@ -48,8 +48,8 @@ def extract_department_mapping_xlsx(file_path, output_path):
     print(f"映射表已保存至: {output_path}")
 
 
-# --- 参数设置 ---
-file_name = '阳光优采交易订单2月.xlsx'  # 你的原始文件名
-output_name = '采购部门企业对照表.csv'  # 导出的字典文件
-
-extract_department_mapping_xlsx(file_name, output_name)
+if __name__ == "__main__":
+    # --- 参数设置 (仅用于本地调试) ---
+    file_name = '阳光优采交易订单2月.xlsx'  # 你的原始文件名
+    output_name = '采购部门企业对照表.csv'  # 导出的字典文件
+    extract_department_mapping_xlsx(file_name, output_name)

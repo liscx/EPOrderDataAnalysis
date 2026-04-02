@@ -3,12 +3,14 @@ import traceback
 import sys
 import os
 
-# 挂载 result 路径以引入新版增强集成脚本
+# 挂载 src 路径以引入移动后的集成脚本
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-from result.data_combine import main as run_data_combine
-from result.charts_combine import build_report as run_charts_combine
+src_inner = os.path.join(project_root, "src")
+if src_inner not in sys.path:
+    sys.path.insert(0, src_inner)
+
+from ..result.data_combine import main as run_data_combine
+from ..result.charts_combine import build_report as run_charts_combine
 
 from ..visualization import run_report_output, run_dashboard_output
 from . import (
@@ -36,7 +38,54 @@ def start_analysis_flow(config):
     if mode == "all":
         start_time = time.time()
         try:
-            print("\n[1/10] 正在执行数据清洗与区间切片...")
+            print("\n" + "*"*30)
+            print("[预处理] 数据完整性审计启动...")
+            input_path = config['file_config']['input_path'] if 'input_path' in config['file_config'] else config['file_config']['input_file']
+            output_path = config['file_config']['output_file']
+            
+            import pandas as pd
+            df_init = pd.read_excel(input_path)
+            # 预清理列名空格
+            df_init.columns = [str(c).strip() for c in df_init.columns]
+            
+            print(f"-> 原始列名清单: {df_init.columns.tolist()}")
+            
+            # 检测核心列状态
+            needs_fill = False
+            if '采购企业' not in df_init.columns:
+                print("-> ⚠️ 预警：原始数据中缺少 [采购企业] 列！")
+                needs_fill = True
+            else:
+                nan_count = df_init['采购企业'].isna().sum()
+                print(f"-> [采购企业] 空值统计: {nan_count} 行 (总计 {len(df_init)} 行)")
+                if nan_count > 0:
+                    needs_fill = True
+            
+            if needs_fill:
+                from ..tools.Purchasing_enterprise_mapping_filling import fill_in_place
+                from ..core.constants import MAPPING_SCAN_DIRS, MAPPING_CSV_NAME
+                
+                # 智能寻找映射文件
+                mapping_file = None
+                from ..core.config import get_base_dir
+                base_dir = get_base_dir()
+                for d in MAPPING_SCAN_DIRS:
+                    target = os.path.join(base_dir, d, MAPPING_CSV_NAME)
+                    if os.path.exists(target):
+                        mapping_file = target
+                        break
+                
+                if mapping_file:
+                    print(f"-> 正在调用映射表进行回填: [{MAPPING_CSV_NAME}]")
+                    fill_in_place(input_path, mapping_file)
+                    print("-> 原始数据回填补全已完成。")
+                else:
+                    print(f"-> ⚠️ 警告：未找到映射表 [{MAPPING_CSV_NAME}]，跳过自动补全。")
+            else:
+                print("-> 原始数据完整性良好。")
+            print("*"*30 + "\n")
+
+            print("[1/10] 正在执行数据清洗与区间切片...")
             do_wash()
 
             print("\n[2/10] 正在执行月度/专区交易明细统计...")

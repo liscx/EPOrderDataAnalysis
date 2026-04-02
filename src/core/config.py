@@ -11,19 +11,24 @@ def get_base_dir():
     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def load_config(config_path=None):
-    """
-    统一的、兼容打包的配置文件加载器
-    """
+    from .constants import CONFIG_SCAN_DIRS
     base_dir = get_base_dir()
+    
     if config_path is None:
-        config_path = os.path.join(base_dir, "config.yaml")
+        filename = "config.yaml"
+        # 尝试遍历所有扫描路径以定位配置文件
+        for d in CONFIG_SCAN_DIRS:
+            target_path = os.path.join(base_dir, d, filename)
+            if os.path.exists(target_path):
+                config_path = target_path
+                break
         
-    if not os.path.exists(config_path):
-         # 如果没找到，尝试在当前 CWD 辅助查找
-         if os.path.exists("config.yaml"):
-             config_path = "config.yaml"
-         else:
-             return {} # 返回空配置防止崩溃
+        # 兜底：如果依然找不到，尝试在当前工作目录寻找
+        if not config_path or not os.path.exists(config_path):
+            if os.path.exists("config.yaml"):
+                config_path = "config.yaml"
+            else:
+                return {} # 返回空配置防止崩溃
 
     with open(config_path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+        return yaml.safe_load(f) or {}

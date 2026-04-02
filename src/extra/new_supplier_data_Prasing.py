@@ -3,11 +3,7 @@ import pandas as pd
 import os
 import sys
 
-def get_bundle_dir():
-    """获取程序根目录，处理打包后的路径适配"""
-    if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
-    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from ..core import get_base_dir
 
 def run_new_supplier_parsing():
     """工作流集成入口：提取供应商原始数据并写入结果表"""
@@ -16,14 +12,13 @@ def run_new_supplier_parsing():
     
     # 1. 定位输入的 TXT 文件（支持打包环境下平级读取）
     txt_filename = "GYSdata.txt"
-    base_dir = get_bundle_dir()
+    base_dir = get_base_dir()
     
-    # 尝试在平级和 src/extra 寻找
-    paths_to_try = [
-        os.path.join(base_dir, txt_filename),
-        os.path.join(base_dir, "src", "extra", txt_filename),
-        os.path.join(os.getcwd(), txt_filename)
-    ]
+    # 从核心常量库载入扫描路径规则
+    from ..core.constants import GYS_SCAN_DIRS
+    paths_to_try = [os.path.join(base_dir, d, txt_filename).replace("\\\\", "\\") for d in GYS_SCAN_DIRS]
+    # 对当前工作目录做额外兜底
+    paths_to_try.append(os.path.join(os.getcwd(), txt_filename))
     
     file_path = None
     for p in paths_to_try:

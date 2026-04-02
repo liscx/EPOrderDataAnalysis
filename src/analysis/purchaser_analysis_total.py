@@ -70,22 +70,27 @@ def run_purchaser_analysis():
     # 确保金额和数量是数值
     df['订单金额（元）'] = pd.to_numeric(df['订单金额（元）'], errors='coerce').fillna(0)
 
-    # 4. 汇总概览计算 (控制台输出)
+    # --- 诊断：查看列状态 ---
+    print(f"[诊断] 识别到的维度列为: [{target_col}]")
+    print(f"[诊断] 该列前5行内容为:\n{df[target_col].head()}")
+    print(f"[诊断] 该列空值数量: {df[target_col].isna().sum()}")
+
+    # 4. 汇总概览计算 (增加空数据防御)
     total_ent_count = df[target_col].nunique()
-
-    # 累计最高订单量企业
     ent_order_stats = df.groupby(target_col)['订单号'].nunique()
-    max_order_val = ent_order_stats.max()
-    max_order_ent = ent_order_stats.idxmax()
-
-    # 累计最高总金额企业
     ent_money_stats = df.groupby(target_col)['订单金额（元）'].sum()
-    max_money_val = ent_money_stats.max()
-    max_money_ent = ent_money_stats.idxmax()
 
-    print(f"1. 全量采购主体总数：{total_ent_count} 家")
-    print(f"2. 历史最高订单量单位：{max_order_ent} ({max_order_val} 笔)")
-    print(f"3. 历史最高交易金额单位：{max_money_ent} ({max_money_val:,.2f} 元)")
+    if not ent_order_stats.empty:
+        max_order_val = ent_order_stats.max()
+        max_order_ent = ent_order_stats.idxmax()
+        max_money_val = ent_money_stats.max()
+        max_money_ent = ent_money_stats.idxmax()
+
+        print(f"1. 全量采购主体总数：{total_ent_count} 家")
+        print(f"2. 历史最高订单量单位：{max_order_ent} ({max_order_val} 笔)")
+        print(f"3. 历史最高交易金额单位：{max_money_ent} ({max_money_val:,.2f} 元)")
+    else:
+        print(f"⚠️ 预警：识别到的 [{target_col}] 列数据全部为空，无法生成最值统计。")
     print("-" * 50)
 
     # 5. 构造明细汇总表

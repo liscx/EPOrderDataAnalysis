@@ -16,25 +16,7 @@ try:
 except ImportError:
     pass
 
-def get_base_dir():
-    if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
-    curr_dir = os.path.dirname(os.path.abspath(__file__))
-    if os.path.basename(curr_dir) == 'result':
-        return os.path.dirname(curr_dir)
-    return curr_dir
-
-def load_config():
-    """统一兼容打包后的路径定位逻辑"""
-    base_dir = get_base_dir()
-    config_path = os.path.join(base_dir, "config.yaml")
-    if not os.path.exists(config_path):
-        return {}
-    try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f) or {}
-    except:
-        return {}
+from ..core import get_base_dir, load_config
 
 def get_charts_via_js(html_path, output_dir, chart_mapping):
     """通过执行JS脚本直接从Canvas获取Base64图片"""

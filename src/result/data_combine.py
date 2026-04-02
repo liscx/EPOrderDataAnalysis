@@ -4,18 +4,7 @@ import yaml
 import pandas as pd
 from docx import Document
 
-def get_base_dir():
-    if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-def load_config():
-    base_dir = get_base_dir()
-    config_path = os.path.join(base_dir, "config.yaml")
-    if not os.path.exists(config_path):
-        config_path = "config.yaml"
-    with open(config_path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from ..core import get_base_dir, load_config
 
 def get_paths():
     config = load_config()
@@ -39,10 +28,19 @@ def get_paths():
         os.makedirs(output_dir, exist_ok=True)
         
     EXCEL_FILE = excel_path
-    # 优先检测根目录下的原始模板
-    TEMPLATE_FILE = os.path.join(get_base_dir(), "template", "运营报告模板.docx")
-    if not os.path.exists(TEMPLATE_FILE):
-        # 兜底到根目录直接找
+    # 从核心常量库载入扫描路径规则
+    from ..core.constants import TEMPLATE_SCAN_DIRS
+    filename = "运营报告模板.docx"
+    paths_to_try = [os.path.join(get_base_dir(), d, filename).replace("\\\\", "\\") for d in TEMPLATE_SCAN_DIRS]
+    
+    TEMPLATE_FILE = None
+    for p in paths_to_try:
+        if os.path.exists(p):
+            TEMPLATE_FILE = p
+            break
+            
+    if not TEMPLATE_FILE:
+        # 如果还是没找到，默认回退到根目录路径（即使不存在也会在后续报错中抛出）
         TEMPLATE_FILE = os.path.join(get_base_dir(), "运营报告模板.docx")
         
     OUTPUT_FILE = os.path.join(output_dir, f"{time_label}月运营报告_gen.docx")

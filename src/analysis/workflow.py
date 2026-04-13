@@ -23,6 +23,9 @@ from . import (
     run_range_supplier_top10, 
     run_product_analysis
 )
+from .enterprise_repair import repair_enterprise_data
+from .provider_type_repair import repair_provider_type
+from .provider_alias_repair import repair_provider_alias
 
 def start_analysis_flow(config):
     """
@@ -38,9 +41,19 @@ def start_analysis_flow(config):
     if mode == "all":
         start_time = time.time()
         try:
+            print("[0/10] 预处理: 正在执行数据清理与修正...")
+            input_path = config['file_config']['input_path'] if 'input_path' in config['file_config'] else config['file_config']['input_file']
+            
+            # 顺序说明：
+            # 1. 先进行别名修复（统一供应商名称，避免后续匹配失效）
+            # 2. 进行采购企业内联修复
+            # 3. 进行供应商类型修正（基于统一后的名称）
+            repair_provider_alias(input_path)
+            repair_enterprise_data(input_path)
+            repair_provider_type(input_path)
+
             print("\n" + "*"*30)
             print("[预处理] 数据完整性审计启动...")
-            input_path = config['file_config']['input_path'] if 'input_path' in config['file_config'] else config['file_config']['input_file']
             output_path = config['file_config']['output_file']
             
             import pandas as pd
@@ -113,14 +126,14 @@ def start_analysis_flow(config):
             print("\n[9/12] 正在提取全量核心概览指标...")
             run_enhanced_metrics()
             
-            print("\n[10/12] 正在创作可视化看板...")
-            run_dashboard_output()
-            
-            print("\n[11/12] 正在全量集成终极运营报告数据...")
-            run_data_combine()
-            
-            print("\n[12/12] 正在植入高清图表至报告...")
-            run_charts_combine()
+            # print("\n[10/12] 正在创作可视化看板...")
+            # run_dashboard_output()
+            #
+            # print("\n[11/12] 正在全量集成终极运营报告数据...")
+            # run_data_combine()
+            #
+            # print("\n[12/12] 正在植入高清图表至报告...")
+            # run_charts_combine()
 
 
 

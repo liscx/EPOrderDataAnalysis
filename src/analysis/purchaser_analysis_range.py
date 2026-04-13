@@ -57,7 +57,13 @@ def run_range_purchaser_top10():
 
     # 3. 预处理与向上填充
     df_period['订单号'] = df_period['订单号'].ffill()
-    df_period[target_col] = df_period[target_col].replace(['nan', 'None', ''], pd.NA).ffill()
+    
+    # 统一处理无效占位符和空值
+    df_period[target_col] = df_period[target_col].replace(['nan', 'None', '', '采购企业不存在'], pd.NA)
+    df_period[target_col] = df_period[target_col].ffill()
+
+    # 剔除无法识别的企业记录（防止它们进入 Top10 排行）
+    df_period = df_period.dropna(subset=[target_col])
 
     if '专区名称' in df_period.columns:
         df_period['专区名称'] = df_period['专区名称'].ffill()

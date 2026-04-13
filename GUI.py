@@ -14,3 +14,5 @@ if __name__ == "__main__":
     # 当探测到根目录下无 config.yaml 时会自动根据当前日期生成填充默认值。
     app = ModernAnalysisGUI()
     app.mainloop()
+
+

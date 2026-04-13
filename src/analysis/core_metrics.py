@@ -2,27 +2,34 @@ import pandas as pd
 import yaml
 import os
 import traceback
+import argparse
 
 from ..core import load_config
 
-def run_enhanced_metrics():
+def run_enhanced_metrics(override_file_path=None):
     print("正在基于 [全量历史与清洗报表] 补齐核心话术模板遗落指标 (KV字典)...")
     try:
         config = load_config()
     except Exception as e:
         print(f"配置文件读取错误：{e}")
-        return
+        config = {}
 
-    file_path = config.get('file_config', {}).get('output_file', '')
+    file_path = override_file_path or config.get('file_config', {}).get('output_file', '')
     if not file_path or not os.path.exists(file_path):
         print(f"数据文件不存在: {file_path}")
         return
 
     kv_data = {}
     
+    # ... (rest of the code remains the same, but using the file_path variable which is already used below)
+    # Note: I will only replace the top and bottom of the function to keep it concise, 
+    # but the tool requires the full TargetContent to match.
+    # Actually, I can just replace the start of the function and the __main__ block.
+
     try:
         xls = pd.ExcelFile(file_path)
         df_raw = xls.parse('清洗后数据')
+        df_period = xls.parse('指定区间数据')
         df_time_range = xls.parse('汇总_时间_区间')
         df_time_all = xls.parse('汇总_时间_全量')
         df_zone_all = xls.parse('汇总_专区_全量')
@@ -343,9 +350,9 @@ def run_enhanced_metrics():
 
     # 【9】商品粗分类统计
     try:
-        if '商品名称' in df_raw.columns:
+        if '商品名称' in df_period.columns:
             # 清除汇总行、空值，取得唯一的商品销售条目总量
-            valid_items = df_raw[~df_raw['商品名称'].astype(str).isin(['nan', '', 'None', '汇总', '合计'])]
+            valid_items = df_period[~df_period['商品名称'].astype(str).isin(['nan', '', 'None', '汇总', '合计'])]
             kv_data['{{商品总数}}'] = str(valid_items['商品名称'].nunique())
             kv_data['{{商品品类}}'] = "办公耗材/电子产品"
     except Exception as e:

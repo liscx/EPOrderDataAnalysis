@@ -14,6 +14,8 @@ def main():
     parser = argparse.ArgumentParser(description="Data Engine 命令行分析工具")
     parser.add_argument("--config", default="config.yaml", help="配置文件路径")
     parser.add_argument("--mode", choices=["all", "custom"], default="all", help="执行模式")
+    parser.add_argument("--input", help="输入原始 Excel 文件路径")
+    parser.add_argument("--output", help="输出结果 Excel 文件路径")
     
     args = parser.parse_args()
     
@@ -24,6 +26,18 @@ def main():
         return
         
     config["execution_mode"] = args.mode
+
+    # 命令行参数覆盖配置文件逻辑
+    if "file_config" not in config:
+        config["file_config"] = {}
+        
+    if args.input:
+        config["file_config"]["input_file"] = args.input
+        print(f"-> 命令行输入路径强制覆盖: {args.input}")
+
+    if args.output:
+        config["file_config"]["output_file"] = args.output
+        print(f"-> 命令行输出路径强制覆盖: {args.output}")
     
     # 执行流程
     try:

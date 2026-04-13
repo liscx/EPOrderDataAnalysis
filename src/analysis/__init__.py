@@ -6,4 +6,7 @@ from .purchaser_analysis_range import run_range_purchaser_top10
 from .supplier_analysis_total import run_supplier_analysis
 from .supplier_analysis_range import run_range_supplier_top10
 from .goods_analysis import run_product_analysis
+from .enterprise_repair import repair_enterprise_data
+from .provider_type_repair import repair_provider_type
+from .provider_alias_repair import repair_provider_alias
 from .workflow import start_analysis_flow

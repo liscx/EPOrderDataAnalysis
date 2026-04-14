@@ -16,6 +16,8 @@ def main():
     parser.add_argument("--mode", choices=["all", "custom"], default="all", help="执行模式")
     parser.add_argument("--input", help="输入原始 Excel 文件路径")
     parser.add_argument("--output", help="输出结果 Excel 文件路径")
+    parser.add_argument("--start", help="分析起始日期 (YYYY-MM-DD)")
+    parser.add_argument("--end", help="分析结束日期 (YYYY-MM-DD)")
     
     args = parser.parse_args()
     
@@ -38,6 +40,17 @@ def main():
     if args.output:
         config["file_config"]["output_file"] = args.output
         print(f"-> 命令行输出路径强制覆盖: {args.output}")
+
+    if "analysis_period" not in config:
+        config["analysis_period"] = {}
+
+    if args.start:
+        config["analysis_period"]["start_date"] = args.start
+        print(f"-> 命令行起始日期强制覆盖: {args.start}")
+
+    if args.end:
+        config["analysis_period"]["end_date"] = args.end
+        print(f"-> 命令行结束日期强制覆盖: {args.end}")
     
     # 执行流程
     try:
